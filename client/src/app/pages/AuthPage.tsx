@@ -61,7 +61,7 @@ export function AuthPage({ mode }: { mode: Mode }) {
   const toast = useToast();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, login, register, server } = useAuth();
+  const { user, checking, login, register, server } = useAuth();
   const uid = useId();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -75,7 +75,9 @@ export function AuthPage({ mode }: { mode: Mode }) {
   useDocumentTitle(t(register_ ? 'app.auth.register.title' : 'app.auth.login.title'));
 
   const from = (location.state as { from?: string } | null)?.from ?? '/';
-  if (user && !busy) return <Navigate to="/perfil" replace />;
+  // El usuario guardado en el navegador puede tener la sesión caducada: antes de mandarlo
+  // al perfil se espera a que el servidor la confirme.
+  if (user && !busy) return checking ? null : <Navigate to="/perfil" replace />;
 
   const validate = (): Partial<Record<FieldName, string>> => {
     const errs: Partial<Record<FieldName, string>> = {};
