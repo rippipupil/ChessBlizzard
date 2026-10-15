@@ -127,11 +127,20 @@ export function Mountain({ course, statuses, onLocked }: Props) {
               ) : (
                 <Icon name={STAGE_ICONS[stage.type]} size={iconSize} strokeWidth={compact ? 2.4 : 2.2} />
               );
+            const label = compact ? null : (
+              <span className={`app-m-label${node.left ? ' is-left' : ''}`} style={{ top: node.r - 17, width: LABEL_W }} aria-hidden="true">
+                <span className="app-m-label-title">{tx(stage.title)}</span>
+                {(status === 'done' || tx(stage.subtitle)) && (
+                  <span className="app-m-label-sub">{status === 'done' ? t('app.stage.status.done') : tx(stage.subtitle)}</span>
+                )}
+              </span>
+            );
             return (
               <li key={stage.id} className={`app-m-stage is-${status}${node.summit ? ' is-summit' : ''}`}>
                 {status === 'locked' ? (
                   <button type="button" className="app-m-node" style={box} aria-label={stageLabel(stage, status)} aria-disabled="true" onClick={() => onLocked(stage)}>
                     {icon}
+                    {label}
                   </button>
                 ) : (
                   <Link to={`/curso/${course.id}/${stage.id}`} className="app-m-node" style={box} aria-label={stageLabel(stage, status)}>
@@ -142,19 +151,8 @@ export function Mountain({ course, statuses, onLocked }: Props) {
                         {t('app.learn.start')}
                       </span>
                     )}
+                    {label}
                   </Link>
-                )}
-                {!compact && (
-                  <span
-                    className={`app-m-label${node.left ? ' is-left' : ''}`}
-                    style={{ left: node.left ? node.x - node.r - 14 - LABEL_W : node.x + node.r + 14, top: node.y - 20, width: LABEL_W }}
-                    aria-hidden="true"
-                  >
-                    <span className="app-m-label-title">{tx(stage.title)}</span>
-                    {(status === 'done' || tx(stage.subtitle)) && (
-                      <span className="app-m-label-sub">{status === 'done' ? t('app.stage.status.done') : tx(stage.subtitle)}</span>
-                    )}
-                  </span>
                 )}
               </li>
             );

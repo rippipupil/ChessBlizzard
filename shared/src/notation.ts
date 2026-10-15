@@ -11,13 +11,13 @@ export function localizeSan(san: string, style: NotationStyle): string {
   return san.replace(/[KQRBN]/g, (p) => ES_PIECES[p] ?? p);
 }
 
-/** Traduce una cadena con números de jugada ("9...Nd7", "1.e4 c5 2.Nf3"). */
+/** Traduce una cadena con números de jugada ("9...Nd7", "...Nd7", "1.e4 c5 2.Nf3"). */
 export function localizeMoveText(text: string, style: NotationStyle): string {
   if (style === 'en') return text;
   return text
     .split(/(\s+)/)
     .map((tok) => {
-      const m = tok.match(/^(\d+\.(?:\.\.)?)?(.*)$/);
+      const m = tok.match(/^(\d+\.(?:\.\.)?|\.\.\.)?(.*)$/);
       if (!m) return tok;
       const [, num = '', rest] = m;
       return rest && /^(O-O|[KQRBN]|[a-h])/.test(rest) ? num + localizeSan(rest, style) : tok;
