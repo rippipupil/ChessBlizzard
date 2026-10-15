@@ -1,0 +1,289 @@
+/*
+ * Tokens de diseño. El tema y el modo se eligen con atributos en <html>:
+ *   data-theme="blizzard" | "neon"     data-mode="dark" | "light"
+ * Todos los componentes usan estas variables; nunca colores sueltos.
+ */
+
+:root {
+  --font-display: 'Chakra Petch', 'Barlow', system-ui, sans-serif;
+  --font-body: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --radius-s: 8px;
+  --radius-m: 12px;
+  --radius-l: 16px;
+  --radius-xl: 18px;
+  --shadow-l: 0 24px 60px rgba(0, 0, 0, 0.55);
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* ---------- Black Blizzard · oscuro (por defecto) ---------- */
+:root,
+[data-theme='blizzard'][data-mode='dark'] {
+  color-scheme: dark;
+  --bg: #0c0d0f;
+  --bg-grad: radial-gradient(ellipse 80% 55% at 55% 0%, #1e2125 0%, #0c0d0f 65%);
+  --side: rgba(12, 13, 15, 0.6);
+  --s1: #141518;
+  --s2: #1b1d21;
+  --s3: #24272c;
+  --bd: #272a30;
+  --tx: #eceef1;
+  --tx2: #a9afb7;
+  --tx3: #8a9098;
+  --accent: #9fe3ea;
+  --accent-text: #9fe3ea;
+  --accent-ink: #0b0c0e;
+  --accent-lip: #4f969d;
+  --accent-soft: rgba(159, 227, 234, 0.12);
+  --accent-bd: rgba(159, 227, 234, 0.45);
+  --accent-glow: rgba(159, 227, 234, 0.45);
+  --secondary: #e8eaed;
+  --warn: #f2c14e;
+  --warn-ink: #1a1300;
+  --ok: #9fe3ea;
+  --err: #f0a35e;
+  --done: #e6e9ec;
+  --done-ink: #0c0d0f;
+  --done-lip: #8d939b;
+  --locked: #24272c;
+  --locked-ink: #8a9098;
+  --locked-lip: #0a0b0d;
+  --feedback-ok-bg: #0e1c1f;
+  --feedback-err-bg: #21160d;
+
+  /* Fondo decorativo */
+  --deco-hatch: #181a1d;
+  --deco-flake: rgba(217, 221, 225, 0.25);
+  --deco-beam: rgba(255, 255, 255, 0.018);
+  --mount-back: #121417;
+  --mount-front: #1b1e22;
+  --mount-shade: #15171a;
+  --mount-ridge: #2e3238;
+  --mount-snow: rgba(212, 216, 220, 0.88);
+  --mount-contour: #30343a;
+  --trail-done: #e6e9ec;
+  --trail-todo: #4a4f56;
+
+  /* Tablero */
+  --sq-light: #d4d8dc;
+  --sq-dark: #50565e;
+  --sq-coord-on-light: #50565e;
+  --sq-coord-on-dark: #d4d8dc;
+  --board-frame: 0 0 0 1px #272a30, 0 24px 60px rgba(0, 0, 0, 0.55);
+  --hl-last: rgba(159, 227, 234, 0.3);
+  --hl-select: rgba(159, 227, 234, 0.45);
+  --hl-check: radial-gradient(circle, rgba(240, 120, 90, 0.95) 0%, rgba(240, 120, 90, 0.45) 45%, transparent 72%);
+  --hl-ok: rgba(159, 227, 234, 0.35);
+  --hl-err: rgba(240, 163, 94, 0.45);
+  --dot-move: rgba(12, 13, 15, 0.35);
+  --piece-w-fill: #eef0f2;
+  --piece-w-stroke: #121417;
+  --piece-w-ink: #121417;
+  --piece-b-fill: #1a1c20;
+  --piece-b-stroke: #050607;
+  --piece-b-ink: #c9ced3;
+  --piece-w-filter: none;
+  --piece-b-filter: none;
+  --arrow-plan: #9fe3ea;
+  --arrow-rival: #a9afb7;
+  --arrow-hint: #f2c14e;
+  --arrow-best: #7fd1ae;
+
+  /* Fantasma */
+  --ghost-body: #e9edf0;
+  --ghost-eye: #0b0c0e;
+  --ghost-glint: #9fe3ea;
+}
+
+/* ---------- Black Blizzard · claro ---------- */
+[data-theme='blizzard'][data-mode='light'] {
+  color-scheme: light;
+  --bg: #e9ecef;
+  --bg-grad: radial-gradient(ellipse 80% 55% at 55% 0%, #ffffff 0%, #e9ecef 65%);
+  --side: rgba(255, 255, 255, 0.6);
+  --s1: #ffffff;
+  --s2: #f1f3f5;
+  --s3: #e3e6ea;
+  --bd: #d6dade;
+  --tx: #121417;
+  --tx2: #4c535b;
+  --tx3: #5f666e;
+  --accent: #86d9e2;
+  --accent-text: #1d7480;
+  --accent-ink: #0b0c0e;
+  --accent-lip: #3d9ba6;
+  --accent-soft: rgba(29, 116, 128, 0.12);
+  --accent-bd: rgba(29, 116, 128, 0.5);
+  --accent-glow: rgba(61, 155, 166, 0.45);
+  --secondary: #2a2d32;
+  --warn: #e0a526;
+  --ok: #1d7480;
+  --err: #b55a12;
+  --done: #2a2d32;
+  --done-ink: #ffffff;
+  --done-lip: #0c0d0f;
+  --locked: #dde1e5;
+  --locked-ink: #5f666e;
+  --locked-lip: #aab1b8;
+  --feedback-ok-bg: #e2f4f6;
+  --feedback-err-bg: #fbeee2;
+  --deco-hatch: #dde1e5;
+  --deco-flake: rgba(90, 98, 108, 0.18);
+  --deco-beam: rgba(255, 255, 255, 0.5);
+  --mount-back: #d9dde1;
+  --mount-front: #c9ced4;
+  --mount-shade: #bcc2c9;
+  --mount-ridge: #e3e6ea;
+  --mount-snow: #ffffff;
+  --mount-contour: #a6adb5;
+  --trail-done: #2a2d32;
+  --trail-todo: #8f969e;
+  --board-frame: 0 0 0 1px #c9ced4, 0 18px 40px rgba(20, 24, 28, 0.18);
+  --hl-last: rgba(29, 116, 128, 0.28);
+  --hl-select: rgba(29, 116, 128, 0.4);
+  --arrow-plan: #1d8a96;
+  --arrow-rival: #6a7179;
+  --arrow-hint: #c98a10;
+  --arrow-best: #2f8f62;
+  --ghost-body: #2a2d32;
+  --ghost-eye: #f2f4f6;
+  --ghost-glint: #86d9e2;
+}
+
+/* ---------- Neón · oscuro ---------- */
+[data-theme='neon'][data-mode='dark'] {
+  color-scheme: dark;
+  --bg: #08070d;
+  --bg-grad: radial-gradient(ellipse 70% 60% at 40% 15%, #1a1426 0%, #08070d 70%);
+  --side: rgba(9, 7, 15, 0.7);
+  --s1: #110e19;
+  --s2: #181424;
+  --s3: #221c31;
+  --bd: #2c2440;
+  --tx: #efeaf8;
+  --tx2: #b3aac6;
+  --tx3: #958ca8;
+  --accent: #ff4fd8;
+  --accent-text: #ff7fe3;
+  --accent-ink: #1a0616;
+  --accent-lip: #8a1f73;
+  --accent-soft: rgba(255, 79, 216, 0.12);
+  --accent-bd: rgba(255, 79, 216, 0.5);
+  --accent-glow: rgba(255, 79, 216, 0.5);
+  --secondary: #4ff0ff;
+  --warn: #ffe45c;
+  --warn-ink: #1a1300;
+  --ok: #4ff0ff;
+  --err: #ffa15c;
+  --done: #4ff0ff;
+  --done-ink: #05121a;
+  --done-lip: #1d8a96;
+  --locked: #221c31;
+  --locked-ink: #958ca8;
+  --locked-lip: #07060c;
+  --feedback-ok-bg: #0b1a20;
+  --feedback-err-bg: #20120b;
+  --deco-hatch: #16121f;
+  --deco-flake: rgba(79, 240, 255, 0.1);
+  --deco-beam: rgba(255, 79, 216, 0.02);
+  --mount-back: #120e1b;
+  --mount-front: #1a1426;
+  --mount-shade: #140f1f;
+  --mount-ridge: #3a2a4f;
+  --mount-snow: rgba(79, 240, 255, 0.55);
+  --mount-contour: #3a2a4f;
+  --trail-done: #4ff0ff;
+  --trail-todo: #4a3d63;
+  --sq-light: #3a3948;
+  --sq-dark: #1f1e2a;
+  --sq-coord-on-light: #958ca8;
+  --sq-coord-on-dark: #958ca8;
+  --board-frame: 0 0 0 2px #ff4fd8, 0 0 26px rgba(255, 79, 216, 0.35), 0 24px 60px rgba(0, 0, 0, 0.6);
+  --hl-last: rgba(79, 240, 255, 0.2);
+  --hl-select: rgba(79, 240, 255, 0.35);
+  --hl-ok: rgba(79, 240, 255, 0.3);
+  --hl-err: rgba(255, 161, 92, 0.4);
+  --dot-move: rgba(239, 234, 248, 0.3);
+  --piece-w-fill: #e6fdff;
+  --piece-w-stroke: #0a9fb0;
+  --piece-w-ink: #0a6f7c;
+  --piece-b-fill: #ff4fd8;
+  --piece-b-stroke: #3a0530;
+  --piece-b-ink: #3a0530;
+  --piece-w-filter: drop-shadow(0 0 3px rgba(79, 240, 255, 0.75));
+  --piece-b-filter: drop-shadow(0 0 3px rgba(255, 79, 216, 0.75));
+  --arrow-plan: #4ff0ff;
+  --arrow-rival: #b3aac6;
+  --arrow-hint: #ffe45c;
+  --arrow-best: #7dffb3;
+  --ghost-body: #1a0f22;
+  --ghost-eye: #4ff0ff;
+  --ghost-glint: #ffe45c;
+}
+
+/* ---------- Neón · claro ---------- */
+[data-theme='neon'][data-mode='light'] {
+  color-scheme: light;
+  --bg: #f3f0fa;
+  --bg-grad: radial-gradient(ellipse 70% 60% at 40% 15%, #ffffff 0%, #f3f0fa 70%);
+  --side: rgba(255, 255, 255, 0.65);
+  --s1: #ffffff;
+  --s2: #f6f2fd;
+  --s3: #ebe4f7;
+  --bd: #dcd2ee;
+  --tx: #1a1326;
+  --tx2: #4e4462;
+  --tx3: #645a78;
+  --accent: #ff4fd8;
+  --accent-text: #b0128c;
+  --accent-ink: #1a0616;
+  --accent-lip: #a32387;
+  --accent-soft: rgba(176, 18, 140, 0.1);
+  --accent-bd: rgba(176, 18, 140, 0.45);
+  --accent-glow: rgba(255, 79, 216, 0.35);
+  --secondary: #087f8c;
+  --warn: #c99a00;
+  --ok: #087f8c;
+  --err: #b55a12;
+  --done: #087f8c;
+  --done-ink: #ffffff;
+  --done-lip: #055861;
+  --locked: #e7e0f3;
+  --locked-ink: #645a78;
+  --locked-lip: #c4b8da;
+  --feedback-ok-bg: #e1f6f8;
+  --feedback-err-bg: #fbeee2;
+  --deco-hatch: #e6def3;
+  --deco-flake: rgba(176, 18, 140, 0.12);
+  --deco-beam: rgba(255, 79, 216, 0.04);
+  --mount-back: #e2d9f1;
+  --mount-front: #d5c9ea;
+  --mount-shade: #cabcE2;
+  --mount-ridge: #efe9f8;
+  --mount-snow: #ffffff;
+  --mount-contour: #b5a6cf;
+  --trail-done: #087f8c;
+  --trail-todo: #a596c2;
+  --sq-light: #d9d4e6;
+  --sq-dark: #7c7393;
+  --sq-coord-on-light: #7c7393;
+  --sq-coord-on-dark: #d9d4e6;
+  --board-frame: 0 0 0 2px #ff4fd8, 0 0 18px rgba(255, 79, 216, 0.25);
+  --hl-last: rgba(8, 127, 140, 0.25);
+  --hl-select: rgba(8, 127, 140, 0.4);
+  --dot-move: rgba(26, 19, 38, 0.3);
+  --piece-w-fill: #ffffff;
+  --piece-w-stroke: #087f8c;
+  --piece-w-ink: #087f8c;
+  --piece-b-fill: #d4199f;
+  --piece-b-stroke: #3a0530;
+  --piece-b-ink: #fbe6f6;
+  --piece-w-filter: none;
+  --piece-b-filter: none;
+  --arrow-plan: #087f8c;
+  --arrow-rival: #645a78;
+  --arrow-hint: #c99a00;
+  --arrow-best: #1f8a4c;
+  --ghost-body: #ffffff;
+  --ghost-eye: #087f8c;
+  --ghost-glint: #c99a00;
+}

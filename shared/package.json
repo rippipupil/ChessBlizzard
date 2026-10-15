@@ -1,0 +1,22 @@
+{
+  "name": "@chessblizzard/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "audit": "tsx scripts/audit-content.ts"
+  },
+  "dependencies": {
+    "chess.js": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.0",
+    "stockfish": "^19.0.1",
+    "tsx": "^4.21.0",
+    "typescript": "~5.9.3",
+    "vitest": "^5.0.0"
+  }
+}
