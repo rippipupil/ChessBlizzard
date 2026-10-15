@@ -139,11 +139,21 @@ useSettings(): { settings: Settings; update(patch: Partial<Settings>): void }
 useProgress(): {
   state: ProgressState;
   today: string;                            // AAAA-MM-DD local
-  record(event: DistributiveOmit<ProgressEvent, 'day'>): void;
+  record(event: DistributiveOmit<ProgressEvent, 'day'>): number;  // XP ganada
+  replace(state: ProgressState): void;
+  lastXp: { amount: number; at: number } | null;
+  syncStatus: ...;                          // estado de la sincronización con la cuenta
 }
+// ProgressSync: push(events) y, opcionales, attach() / pull() para enlazar la cuenta.
+
+// state/auth.tsx
+useAuth(): sesión actual (user | null), login, register, logout
 
 // theme/Ghost.tsx
-<Ghost mood="neutral" | "happy" | "sad" | "thinking" size={number} />
+<Ghost mood="neutral" | "happy" | "sad" | "thinking" size={number} theme?={'blizzard' | 'neon'} />
+
+// theme/Backdrop.tsx
+<Backdrop />                                // fondo animado del tema actual
 
 // board/Board.tsx
 <Board

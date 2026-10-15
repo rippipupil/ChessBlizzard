@@ -2527,8 +2527,9 @@ button.app-theme-card:hover {
 }
 
 @media (max-width: 899px) {
+  /* En móvil los rótulos de neón caerían encima de la montaña y parecerían botones. */
   .app-side,
-  .app-bd-sign--bars {
+  .app-bd-sign {
     display: none;
   }
   .app-bottom {

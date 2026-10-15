@@ -99,8 +99,8 @@ export function StudyLine({ course, line, newFrom, header, onFinished, onProgres
   const preview = !replay && !!nextPly && nextPly.color === user;
   const focus = preview ? nextPly : lastPly;
 
-  // Flechas: en la vista previa, la jugada que toca más el plan rival de la jugada anterior;
-  // después de una jugada, las flechas de su comentario.
+  // Flechas: en la vista previa, la jugada que toca hacer y el plan rival de la jugada
+  // anterior; después de una jugada, las flechas de su comentario.
   const arrows: BoardArrow[] = [];
   let marks: string[] = [];
   if (!replay) {
