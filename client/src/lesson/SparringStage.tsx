@@ -2,7 +2,7 @@
 // posición esté en el repertorio del curso, el rival juega una de las respuestas del libro
 // y el alumno ve si sigue su repertorio. Fuera del libro juega Stockfish con el nivel
 // elegido (5 niveles). Al terminar se registra el resultado y, la primera vez, la etapa.
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Chess } from 'chess.js';
 import { START_FEN, positionKey, stageKey, buildRepertoire, type Course, type SparringStage as SparringStageDef } from '@chessblizzard/shared';
 import { checkSquare, gameEnd, legalDests, playOne, tryMove, type GameEnd, type PlayedMove } from '../board';
@@ -249,7 +249,7 @@ export function SparringStage({ course, stage, onExit }: { course: Course; stage
       name: `Stockfish · ${levelName}`,
       note: thinking ? <span className="cb-thinking-note">{t('lesson.sparring.thinking')}</span> : inBook && phase === 'playing' ? t('lesson.bookMoves') : undefined,
     },
-  } as Record<'w' | 'b', { name: string; note?: React.ReactNode }>;
+  } as Record<'w' | 'b', { name: string; note?: ReactNode }>;
 
   if (phase === 'setup') {
     return (
@@ -302,7 +302,7 @@ export function SparringStage({ course, stage, onExit }: { course: Course; stage
     );
   }
 
-  let feedback: React.ReactNode = null;
+  let feedback: ReactNode = null;
   if (phase === 'over' && result) {
     const title = t(`lesson.sparring.result.${result.result}`);
     feedback = (
