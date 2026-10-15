@@ -122,4 +122,48 @@ export const kingsIndianPuzzles: Puzzle[] = [
     },
     rating: 1850,
   },
+  {
+    id: 'kid-p10',
+    moves:
+      '1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.Nf3 O-O 6.Be2 e5 7.O-O Nc6 8.d5 Ne7 9.b4 Nh5 10.Re1 f5 11.Ng5 Nf6 12.f3 Kh8 13.Be3 Nh5 14.c5 Bh6 15.exf5',
+    solution: 'Nxf5',
+    theme: { es: 'Defensor sobrecargado', en: 'Overloaded defender' },
+    hint: { es: 'El alfil de e3 tiene un trabajo muy importante. Atácalo.', en: 'The e3-bishop has a very important job. Attack it.' },
+    explanation: {
+      es: 'Tu alfil de h6 ataca el caballo de g5, y solo lo defiende el alfil de e3. Tras [15.exf5?], recaptura con el caballo: [15...Nxf5!] ataca a ese alfil. Si se aparta (por ejemplo [16.Bf2]), [16...Bxg5] gana una pieza; si se queda, ...Nxe3 elimina al defensor y el caballo cae igual. Al recapturar, elige la pieza que crea una amenaza.',
+      en: 'Your h6-bishop attacks the g5-knight, and only the e3-bishop defends it. After [15.exf5?], recapture with the knight: [15...Nxf5!] hits that bishop. If it steps away (for example [16.Bf2]), [16...Bxg5] wins a piece; if it stays, ...Nxe3 removes the defender and the knight falls anyway. When you recapture, pick the piece that creates a threat.',
+    },
+    rating: 1400,
+  },
+  {
+    id: 'kid-p11',
+    moves: '1.d4 Nf6 2.Nf3 g6 3.Bf4 Bg7 4.e3 d6 5.h3 O-O 6.Be2 Nbd7 7.O-O Qe8 8.Bh2 e5 9.c4 exd4 10.Qxd4',
+    solution: 'Ne4 Qd3 Bxb2',
+    theme: { es: 'Ataque a la descubierta', en: 'Discovered attack' },
+    hint: {
+      es: 'Tu caballo de f6 tapa la diagonal del alfil de g7. ¿Qué hay al final de esa diagonal?',
+      en: 'Your f6-knight blocks the g7-bishop’s diagonal. What stands at the end of it?',
+    },
+    explanation: {
+      es: 'Recapturar con la dama la pone en la gran diagonal de tu alfil, tapada solo por tu caballo de f6. [10...Ne4!] destapa el ataque: la dama tiene que irse (el caballo de e4 lo defiende tu dama de e8) y después [11...Bxb2] gana un peón y ataca la torre de a1, que no tiene adónde ir. Por eso contra el Londres preparas ...e5 con ...Qe8: la dama también trabaja en la columna e.',
+      en: 'Recapturing with the queen puts it on your bishop’s long diagonal, blocked only by your f6-knight. [10...Ne4!] uncovers the attack: the queen must move (your e8-queen defends the e4-knight) and then [11...Bxb2] wins a pawn and hits the a1-rook, which has nowhere to go. That is why against the London you prepare ...e5 with ...Qe8: the queen works on the e-file too.',
+    },
+    rating: 1500,
+  },
+  {
+    id: 'kid-p12',
+    moves:
+      '1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.Nf3 O-O 6.Be2 e5 7.O-O Nc6 8.d5 Ne7 9.Ne1 Nd7 10.Be3 f5 11.f3 f4 12.Bf2 g5 13.Nd3 Ng6 14.c5 Nf6 15.a4 h5 16.Nb5 g4 17.h4',
+    solution: 'g3',
+    theme: { es: 'Ruptura de peones', en: 'Pawn breakthrough' },
+    hint: {
+      es: 'Tus peones ya están junto al rey blanco. ¿Qué casilla ha dejado de vigilar el peón de h?',
+      en: 'Your pawns are already next to the white king. Which square is the h-pawn no longer watching?',
+    },
+    explanation: {
+      es: 'Es la carrera típica de la Mar del Plata, y [17.h4?] es un error: el peón de h ya no controla g3. [17...g3!] ataca el alfil de f2 y abre la puerta del rey blanco. Si [18.Bxg3 fxg3], la columna f se abre para tu torre; y si el blanco deja el alfil (por ejemplo [18.Qe1]), [18...gxf2+] se lo lleva. En la Mar del Plata, ...g3 suele ser el golpe que rompe el enroque blanco.',
+      en: 'This is the typical Mar del Plata race, and [17.h4?] is a mistake: the h-pawn no longer controls g3. [17...g3!] hits the f2-bishop and opens the door to the white king. If [18.Bxg3 fxg3], the f-file opens for your rook; and if White leaves the bishop (for example [18.Qe1]), [18...gxf2+] takes it. In the Mar del Plata, ...g3 is usually the blow that breaks open White’s castle.',
+    },
+    rating: 1550,
+  },
 ];
