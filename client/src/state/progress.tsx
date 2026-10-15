@@ -18,6 +18,8 @@ import { applyEvent, emptyProgress, localDay, type ProgressEvent, type ProgressS
 const STORAGE_KEY = 'cb.progress.v1';
 const RETRY_MIN = 5_000;
 const RETRY_MAX = 120_000;
+/** El servidor admite como mucho 200 eventos por petición. */
+const MAX_BATCH = 100;
 
 type DistributiveOmit<T, K extends keyof never> = T extends unknown ? Omit<T, K> : never;
 export type ProgressEventInput = DistributiveOmit<ProgressEvent, 'day'>;
@@ -159,7 +161,7 @@ export function ProgressProvider({ children, sync = null }: { children: ReactNod
 
       let oneByOne = false;
       while (queue.current.length > 0) {
-        const batch = oneByOne ? queue.current.slice(0, 1) : queue.current.slice();
+        const batch = queue.current.slice(0, oneByOne ? 1 : MAX_BATCH);
         let official: ProgressState;
         try {
           official = await s.push(batch);

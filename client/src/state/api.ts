@@ -20,16 +20,19 @@ export type ApiErrorCode =
   | 'email_taken'
   | 'invalid_credentials'
   | 'unauthorized'
+  | 'forbidden'
   | 'rate_limited'
   | 'not_found'
   | 'network'
   | 'server';
 
+// "internal" (error 500 del servidor) se trata como "server".
 const SERVER_CODES: ReadonlySet<string> = new Set([
   'validation',
   'email_taken',
   'invalid_credentials',
   'unauthorized',
+  'forbidden',
   'rate_limited',
   'not_found',
 ]);
