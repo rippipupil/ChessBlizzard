@@ -1136,7 +1136,7 @@ export const english: Course = {
               options: [
                 { es: 'Para que b4 no se pierda: el caballo de c6 y el alfil de e7 atacan esa casilla', en: 'So that b4 is not lost: the c6-knight and the e7-bishop attack that square' },
                 { es: 'Para sacar la torre por a2', en: 'To bring the rook out via a2' },
-                { es: 'Para impedir ...Ag4', en: 'To prevent ...Bg4' },
+                { es: 'Para impedir [...Bg4]', en: 'To prevent [...Bg4]' },
               ],
               correct: 0,
               explanation: {
@@ -1166,7 +1166,7 @@ export const english: Course = {
             },
             {
               kind: 'choice',
-              question: { es: 'Llegas a esta posición con 1...Cf6 2.Cc3 d5 3.cxd5 Cxd5 4.g3 e5. ¿Qué es?', en: 'You reach this position via 1...Nf6 2.Nc3 d5 3.cxd5 Nxd5 4.g3 e5. What is it?' },
+              question: { es: 'Llegas a esta posición con [1...Nf6 2.Nc3 d5 3.cxd5 Nxd5 4.g3 e5]. ¿Qué es?', en: 'You reach this position via [1...Nf6 2.Nc3 d5 3.cxd5 Nxd5 4.g3 e5]. What is it?' },
               moves: '1.c4 Nf6 2.Nc3 d5 3.cxd5 Nxd5 4.g3 e5',
               options: [
                 { es: 'La línea principal (Dragón al revés) por otro orden de jugadas', en: 'The main line (Reversed Dragon) by a different move order' },

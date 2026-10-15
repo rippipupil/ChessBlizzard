@@ -142,15 +142,15 @@ export const kingsIndian: Course = {
         },
         '14...Nf6': {
           text: {
-            es: 'El caballo vuelve a f6 para apoyar ...g4. Más adelante, ...Rf7 y ...Bf8 defienden c7 y d6 sin frenar el ataque.',
-            en: 'The knight returns to f6 to support ...g4. Later, ...Rf7 and ...Bf8 defend c7 and d6 without slowing the attack.',
+            es: 'El caballo vuelve a f6 para apoyar ...g4. Más adelante, [...Rf7] y [...Bf8] defienden c7 y d6 sin frenar el ataque.',
+            en: 'The knight returns to f6 to support ...g4. Later, [...Rf7] and [...Bf8] defend c7 and d6 without slowing the attack.',
           },
           arrows: ['g5g4'],
         },
       },
       summary: {
-        es: 'Esta es la Mar del Plata: centro cerrado, tú atacas al rey con los peones f y g, el blanco en el flanco de dama con c5. Recuerda el orden: ...Ne7, ...Nd7, ...f5, ...f4, ...g5.',
-        en: 'This is the Mar del Plata: closed centre, you attack the king with the f- and g-pawns, White attacks on the queenside with c5. Remember the order: ...Ne7, ...Nd7, ...f5, ...f4, ...g5.',
+        es: 'Esta es la Mar del Plata: centro cerrado, tú atacas al rey con los peones f y g, el blanco en el flanco de dama con c5. Recuerda el orden: [...Ne7], [...Nd7], ...f5, ...f4, ...g5.',
+        en: 'This is the Mar del Plata: closed centre, you attack the king with the f- and g-pawns, White attacks on the queenside with c5. Remember the order: [...Ne7], [...Nd7], ...f5, ...f4, ...g5.',
       },
     },
     {
@@ -167,15 +167,15 @@ export const kingsIndian: Course = {
         },
         '9...Nh5': {
           text: {
-            es: 'Con b4 ya no hay caballo en e1, así que ...Nd7 sería lento. El caballo va a h5: deja salir al peón f y amenaza ...Nf4.',
-            en: 'With b4 there is no knight on e1, so ...Nd7 would be slow. The knight goes to h5: it frees the f-pawn and threatens ...Nf4.',
+            es: 'Con b4 ya no hay caballo en e1, así que [...Nd7] sería lento. El caballo va a h5: deja salir al peón f y amenaza [...Nf4].',
+            en: 'With b4 there is no knight on e1, so [...Nd7] would be slow. The knight goes to h5: it frees the f-pawn and threatens [...Nf4].',
           },
           arrows: ['f7f5', 'h5f4'],
         },
         '10.Re1': {
           text: {
-            es: 'La torre deja f1 al alfil, que así cubre g2 y h3 si llega ...Nf4.',
-            en: 'The rook vacates f1 for the bishop, which then covers g2 and h3 if ...Nf4 arrives.',
+            es: 'La torre deja f1 al alfil, que así cubre g2 y h3 si llega [...Nf4].',
+            en: 'The rook vacates f1 for the bishop, which then covers g2 and h3 if [...Nf4] arrives.',
           },
         },
         '10...f5': { text: { es: 'Tu ruptura de siempre.', en: 'Your usual break.' }, arrows: ['f5e4'] },
@@ -200,8 +200,8 @@ export const kingsIndian: Course = {
         },
       },
       summary: {
-        es: 'Contra la Bayoneta el caballo va a h5, no a d7. Después de ...f5 y ...Nf6, el rey a h8 y prepara ...h6 para echar al caballo de g5.',
-        en: 'Against the Bayonet the knight goes to h5, not d7. After ...f5 and ...Nf6, king to h8 and prepare ...h6 to kick the g5-knight.',
+        es: 'Contra la Bayoneta el caballo va a h5, no a d7. Después de ...f5 y [...Nf6], el rey a h8 y prepara ...h6 para echar al caballo de g5.',
+        en: 'Against the Bayonet the knight goes to h5, not d7. After ...f5 and [...Nf6], king to h8 and prepare ...h6 to kick the g5-knight.',
       },
     },
     {
@@ -227,14 +227,14 @@ export const kingsIndian: Course = {
         '11.Rb1': { text: { es: 'El blanco prepara b4 a pesar de todo.', en: 'White prepares b4 anyway.' }, rival: ['b2b4'] },
         '12...Kh8': {
           text: {
-            es: 'Como en la Bayoneta, el rey se pone a salvo antes de que se abra el juego. Luego ...Ng8 y ...Ngf6 refuerzan e4.',
-            en: 'As in the Bayonet, the king gets safe before the game opens up. Then ...Ng8 and ...Ngf6 reinforce the pressure on e4.',
+            es: 'Como en la Bayoneta, el rey se pone a salvo antes de que se abra el juego. Luego [...Ng8] y [...Ngf6] refuerzan e4.',
+            en: 'As in the Bayonet, the king gets safe before the game opens up. Then [...Ng8] and [...Ngf6] reinforce the pressure on e4.',
           },
         },
       },
       summary: {
-        es: 'Contra 9.Nd2: primero ...a5 para frenar b4, después ...Nd7 y ...f5 como siempre.',
-        en: 'Against 9.Nd2: first ...a5 to slow b4, then ...Nd7 and ...f5 as always.',
+        es: 'Contra [9.Nd2]: primero ...a5 para frenar b4, después [...Nd7] y ...f5 como siempre.',
+        en: 'Against [9.Nd2]: first ...a5 to slow b4, then [...Nd7] and ...f5 as always.',
       },
     },
     {
@@ -259,15 +259,15 @@ export const kingsIndian: Course = {
         '10...g5': { text: { es: 'Más tiempo: el alfil tiene que retroceder otra vez.', en: 'More tempo: the bishop has to retreat again.' } },
         '11...Nh6': {
           text: {
-            es: 'El caballo se recoloca. Si el blanco cierra con d5, ...Ne7 y ...f5 te dan el ataque típico, con los peones de g ya avanzados.',
-            en: 'The knight regroups. If White closes with d5, ...Ne7 and ...f5 give you the typical attack, with the g-pawn already advanced.',
+            es: 'El caballo se recoloca. Si el blanco cierra con d5, [...Ne7] y ...f5 te dan el ataque típico, con los peones de g ya avanzados.',
+            en: 'The knight regroups. If White closes with d5, [...Ne7] and ...f5 give you the typical attack, with the g-pawn already advanced.',
           },
           arrows: ['h6f7'],
         },
       },
       summary: {
-        es: 'Contra 8.Be3, ...Ng4 gana tiempos contra el alfil. Tus peones de f y g avanzan antes de lo normal.',
-        en: 'Against 8.Be3, ...Ng4 gains time against the bishop. Your f- and g-pawns advance earlier than usual.',
+        es: 'Contra [8.Be3], [...Ng4] gana tiempos contra el alfil. Tus peones de f y g avanzan antes de lo normal.',
+        en: 'Against [8.Be3], [...Ng4] gains time against the bishop. Your f- and g-pawns advance earlier than usual.',
       },
     },
     {
@@ -277,8 +277,8 @@ export const kingsIndian: Course = {
       notes: {
         '7.d5': {
           text: {
-            es: 'Petrosian cerraba el centro de inmediato para clavar tu caballo con Bg5. Así ...f5 cuesta más.',
-            en: 'Petrosian closed the centre at once to pin your knight with Bg5. That makes ...f5 harder.',
+            es: 'Petrosian cerraba el centro de inmediato para clavar tu caballo con [Bg5]. Así ...f5 cuesta más.',
+            en: 'Petrosian closed the centre at once to pin your knight with [Bg5]. That makes ...f5 harder.',
           },
         },
         '7...a5': {
@@ -298,21 +298,21 @@ export const kingsIndian: Course = {
         },
         '10...Qe8': {
           text: {
-            es: 'Rompes la clavada del caballo de f6. Ahora ...Nh7 y ...f5 son posibles.',
-            en: 'You break the pin on the f6-knight. Now ...Nh7 and ...f5 are possible.',
+            es: 'Rompes la clavada del caballo de f6. Ahora [...Nh7] y ...f5 son posibles.',
+            en: 'You break the pin on the f6-knight. Now [...Nh7] and ...f5 are possible.',
           },
         },
         '11...Nh7': {
           text: {
-            es: 'El caballo se aparta y libera el peón f. Tu plan: ...f5, casi siempre con ...h5 o ...Bd7 preparándolo.',
-            en: 'The knight steps away and frees the f-pawn. Your plan: ...f5, usually prepared with ...h5 or ...Bd7.',
+            es: 'El caballo se aparta y libera el peón f. Tu plan: ...f5, casi siempre con ...h5 o [...Bd7] preparándolo.',
+            en: 'The knight steps away and frees the f-pawn. Your plan: ...f5, usually prepared with ...h5 or [...Bd7].',
           },
           arrows: ['f7f5'],
         },
       },
       summary: {
-        es: 'Contra el Petrosian: ...a5, ...h6, ...Na6, la dama a e8 para deshacer la clavada y después ...f5.',
-        en: 'Against the Petrosian: ...a5, ...h6, ...Na6, queen to e8 to undo the pin, and then ...f5.',
+        es: 'Contra el Petrosian: ...a5, ...h6, [...Na6], la dama a e8 para deshacer la clavada y después ...f5.',
+        en: 'Against the Petrosian: ...a5, ...h6, [...Na6], queen to e8 to undo the pin, and then ...f5.',
       },
     },
     {
@@ -356,8 +356,8 @@ export const kingsIndian: Course = {
       notes: {
         '5.f3': {
           text: {
-            es: 'La Sämisch (por Friedrich Sämisch): el blanco refuerza e4, prepara Be3 y Qd2 y a menudo enroca largo para lanzar g4 y h4 contra tu rey.',
-            en: 'The Sämisch (after Friedrich Sämisch): White reinforces e4, prepares Be3 and Qd2, and often castles long to launch g4 and h4 at your king.',
+            es: 'La Sämisch (por Friedrich Sämisch): el blanco refuerza e4, prepara [Be3] y [Qd2] y a menudo enroca largo para lanzar g4 y h4 contra tu rey.',
+            en: 'The Sämisch (after Friedrich Sämisch): White reinforces e4, prepares [Be3] and [Qd2], and often castles long to launch g4 and h4 at your king.',
           },
           rival: ['g2g4', 'h2h4'],
         },
@@ -395,15 +395,15 @@ export const kingsIndian: Course = {
         },
         '13...h4': {
           text: {
-            es: 'El caballo tiene que retroceder. Ahora ...Nh7, ...Ne5 y ...b5 completan tu plan.',
-            en: 'The knight has to retreat. Now ...Nh7, ...Ne5 and ...b5 complete your plan.',
+            es: 'El caballo tiene que retroceder. Ahora [...Nh7], [...Ne5] y ...b5 completan tu plan.',
+            en: 'The knight has to retreat. Now [...Nh7], [...Ne5] and ...b5 complete your plan.',
           },
           arrows: ['b7b5'],
         },
       },
       summary: {
-        es: 'Regla de este curso: contra el blanco clásico (Nf3 y Be2), ...e5. Contra f3, f4 o Bg5, ...c5. Aquí obtienes una Benoni con juego activo.',
-        en: 'Rule of this course: against the classical set-up (Nf3 and Be2), ...e5. Against f3, f4 or Bg5, ...c5. Here you get an active Benoni.',
+        es: 'Regla de este curso: contra el blanco clásico ([Nf3] y [Be2]), ...e5. Contra f3, f4 o [Bg5], ...c5. Aquí obtienes una Benoni con juego activo.',
+        en: 'Rule of this course: against the classical set-up ([Nf3] and [Be2]), ...e5. Against f3, f4 or [Bg5], ...c5. Here you get an active Benoni.',
       },
     },
     {
@@ -441,8 +441,8 @@ export const kingsIndian: Course = {
         '13...Re8': { text: { es: 'La torre sale de la clavada y ataca el alfil de e7.', en: 'The rook escapes the pin and attacks the e7-bishop.' } },
       },
       summary: {
-        es: 'Si el blanco toma en c5, no tengas miedo: ...dxc5, cambio de damas y ...Nc6 dan buen juego.',
-        en: 'If White takes on c5, do not worry: ...dxc5, the queen trade and ...Nc6 give good play.',
+        es: 'Si el blanco toma en c5, no tengas miedo: ...dxc5, cambio de damas y [...Nc6] dan buen juego.',
+        en: 'If White takes on c5, do not worry: ...dxc5, the queen trade and [...Nc6] give good play.',
       },
     },
     {
@@ -463,8 +463,8 @@ export const kingsIndian: Course = {
         },
       },
       summary: {
-        es: 'Contra 7.Nge2: ...Nc6, ...Ne5 y abrir con ...e6. El avance ...h5-h4 molesta al caballo de g3.',
-        en: 'Against 7.Nge2: ...Nc6, ...Ne5 and open with ...e6. The ...h5-h4 push harasses the g3-knight.',
+        es: 'Contra [7.Nge2]: [...Nc6], [...Ne5] y abrir con ...e6. El avance ...h5-h4 molesta al caballo de g3.',
+        en: 'Against [7.Nge2]: [...Nc6], [...Ne5] and open with ...e6. The ...h5-h4 push harasses the g3-knight.',
       },
     },
     {
@@ -506,8 +506,8 @@ export const kingsIndian: Course = {
         },
         '11...Nc7': {
           text: {
-            es: 'Tu plan es ...a6, ...Rb8 y ...b5: una mayoría de peones en el flanco de dama, como en una Benoni.',
-            en: 'Your plan is ...a6, ...Rb8 and ...b5: a queenside pawn majority, as in a Benoni.',
+            es: 'Tu plan es ...a6, [...Rb8] y ...b5: una mayoría de peones en el flanco de dama, como en una Benoni.',
+            en: 'Your plan is ...a6, [...Rb8] and ...b5: a queenside pawn majority, as in a Benoni.',
           },
           arrows: ['b7b5'],
         },
@@ -539,8 +539,8 @@ export const kingsIndian: Course = {
         '9...exd5': { text: { es: 'Abres la columna e para tus torres.', en: 'You open the e-file for your rooks.' } },
         '10...Kh7': {
           text: {
-            es: 'Defiendes h6: así el blanco no tiene trucos con [Bxh6]. Luego ...Re8, ...Bf5 y ...Ne4 activan tus piezas.',
-            en: 'You defend h6, so White has no [Bxh6] tricks. Then ...Re8, ...Bf5 and ...Ne4 activate your pieces.',
+            es: 'Defiendes h6: así el blanco no tiene trucos con [Bxh6]. Luego [...Re8], [...Bf5] y [...Ne4] activan tus piezas.',
+            en: 'You defend h6, so White has no [Bxh6] tricks. Then [...Re8], [...Bf5] and [...Ne4] activate your pieces.',
           },
         },
       },
@@ -561,7 +561,7 @@ export const kingsIndian: Course = {
           },
         },
         '6...Nbd7': { text: { es: 'Preparas ...e5 con el caballo detrás.', en: 'You prepare ...e5 with the knight behind it.' }, arrows: ['e7e5'] },
-        '8...c6': { text: { es: 'Controlas d5 y preparas ...Qb6 o ...a5.', en: 'You control d5 and prepare ...Qb6 or ...a5.' }, marks: ['d5'] },
+        '8...c6': { text: { es: 'Controlas d5 y preparas [...Qb6] o ...a5.', en: 'You control d5 and prepare [...Qb6] or ...a5.' }, marks: ['d5'] },
         '9...exd4': {
           text: {
             es: 'Aquí cambias en d4: con el centro abierto, el peón de e4 será tu objetivo.',
@@ -579,8 +579,8 @@ export const kingsIndian: Course = {
         },
       },
       summary: {
-        es: 'Contra el fianchetto: ...Nbd7, ...e5, ...c6 y, si el blanco no aclara, cambias en d4 para presionar e4.',
-        en: 'Against the fianchetto: ...Nbd7, ...e5, ...c6 and, if White does not clarify, take on d4 to pressure e4.',
+        es: 'Contra el fianchetto: [...Nbd7], ...e5, ...c6 y, si el blanco no aclara, cambias en d4 para presionar e4.',
+        en: 'Against the fianchetto: [...Nbd7], ...e5, ...c6 and, if White does not clarify, take on d4 to pressure e4.',
       },
     },
     {
@@ -616,8 +616,8 @@ export const kingsIndian: Course = {
         },
       },
       summary: {
-        es: 'Contra el Londres: el mismo esquema, pero prepara ...e5 con ...Nbd7 y ...Qe8 antes de jugarlo.',
-        en: 'Against the London: same set-up, but prepare ...e5 with ...Nbd7 and ...Qe8 before playing it.',
+        es: 'Contra el Londres: el mismo esquema, pero prepara ...e5 con [...Nbd7] y [...Qe8] antes de jugarlo.',
+        en: 'Against the London: same set-up, but prepare ...e5 with [...Nbd7] and [...Qe8] before playing it.',
       },
     },
 
@@ -637,8 +637,8 @@ export const kingsIndian: Course = {
         '7.Qxd8+': { text: { es: 'Jaque: tienes que tomar con el rey.', en: 'Check: you have to take with the king.' } },
         '8.Nxe5': {
           text: {
-            es: 'El blanco gana un peón y tu rey ya no puede enrocar. Por eso siempre: primero ...O-O y después ...e5.',
-            en: 'White wins a pawn and your king can no longer castle. That is why it is always: first ...O-O, then ...e5.',
+            es: 'El blanco gana un peón y tu rey ya no puede enrocar. Por eso siempre: primero [...O-O] y después ...e5.',
+            en: 'White wins a pawn and your king can no longer castle. That is why it is always: first [...O-O], then ...e5.',
           },
         },
       },
@@ -709,8 +709,8 @@ export const kingsIndian: Course = {
             {
               title: { es: 'La carrera', en: 'The race' },
               text: {
-                es: 'Mientras tus peones avanzan hacia el rey blanco, el blanco abre la columna c. Defiende lo justo (...Rf7 cubre c7, ...Bf8 cubre d6) y no pierdas tiempo: en esta estructura, el ataque al rey suele valer más que un peón del flanco de dama.',
-                en: 'While your pawns advance towards the white king, White opens the c-file. Defend just enough (...Rf7 covers c7, ...Bf8 covers d6) and do not waste time: in this structure, attacking the king is usually worth more than a queenside pawn.',
+                es: 'Mientras tus peones avanzan hacia el rey blanco, el blanco abre la columna c. Defiende lo justo ([...Rf7] cubre c7, [...Bf8] cubre d6) y no pierdas tiempo: en esta estructura, el ataque al rey suele valer más que un peón del flanco de dama.',
+                en: 'While your pawns advance towards the white king, White opens the c-file. Defend just enough ([...Rf7] covers c7, [...Bf8] covers d6) and do not waste time: in this structure, attacking the king is usually worth more than a queenside pawn.',
               },
               moves: '1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.Nf3 O-O 6.Be2 e5 7.O-O Nc6 8.d5 Ne7 9.Ne1 Nd7 10.Be3 f5 11.f3 f4 12.Bf2 g5 13.Nd3 Ng6 14.c5 Nf6',
               arrows: ['g5g4'],
@@ -719,8 +719,8 @@ export const kingsIndian: Course = {
             {
               title: { es: 'Otros sistemas blancos', en: 'Other White systems' },
               text: {
-                es: 'No todos los rivales irán a la Mar del Plata. En el Campamento 1 verás la Sämisch (f3), los Cuatro Peones (f4), el Averbakh (Bg5), el fianchetto (g3) y el Londres (Bf4). La regla: contra el esquema clásico con Nf3 y Be2, golpea con ...e5; contra f3, f4 o Bg5, que debilitan las casillas negras, golpea con ...c5.',
-                en: 'Not every opponent will enter the Mar del Plata. In Camp 1 you will see the Sämisch (f3), the Four Pawns (f4), the Averbakh (Bg5), the fianchetto (g3) and the London (Bf4). The rule: against the classical set-up with Nf3 and Be2, strike with ...e5; against f3, f4 or Bg5, which weaken the dark squares, strike with ...c5.',
+                es: 'No todos los rivales irán a la Mar del Plata. En el Campamento 1 verás la Sämisch (f3), los Cuatro Peones (f4), el Averbakh ([Bg5]), el fianchetto (g3) y el Londres ([Bf4]). La regla: contra el esquema clásico con [Nf3] y [Be2], golpea con ...e5; contra f3, f4 o [Bg5], que debilitan las casillas negras, golpea con ...c5.',
+                en: 'Not every opponent will enter the Mar del Plata. In Camp 1 you will see the Sämisch (f3), the Four Pawns (f4), the Averbakh ([Bg5]), the fianchetto (g3) and the London ([Bf4]). The rule: against the classical set-up with [Nf3] and [Be2], strike with ...e5; against f3, f4 or [Bg5], which weaken the dark squares, strike with ...c5.',
               },
               moves: '1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6',
             },
@@ -753,7 +753,7 @@ export const kingsIndian: Course = {
             },
             {
               kind: 'move',
-              question: { es: 'El blanco ha jugado 9.Ce1. Prepara tu ruptura.', en: 'White has played 9.Ne1. Prepare your break.' },
+              question: { es: 'El blanco ha jugado [9.Ne1]. Prepara tu ruptura.', en: 'White has played [9.Ne1]. Prepare your break.' },
               moves: '1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.Nf3 O-O 6.Be2 e5 7.O-O Nc6 8.d5 Ne7 9.Ne1',
               answers: ['Nd7', 'Ne8'],
               explanation: {
@@ -824,8 +824,8 @@ export const kingsIndian: Course = {
           title: { es: '¿Y si 9.b4 o 9.Cd2?', en: 'What if 9.b4 or 9.Nd2?' },
           subtitle: { es: 'Bayoneta y 9.Cd2', en: 'Bayonet and 9.Nd2' },
           intro: {
-            es: 'Las dos alternativas modernas a 9.Ce1: el blanco corre por el flanco de dama.',
-            en: 'The two modern alternatives to 9.Ne1: White races on the queenside.',
+            es: 'Las dos alternativas modernas a [9.Ne1]: el blanco corre por el flanco de dama.',
+            en: 'The two modern alternatives to [9.Ne1]: White races on the queenside.',
           },
           lines: ['kid-bayonet', 'kid-nd2'],
         },
