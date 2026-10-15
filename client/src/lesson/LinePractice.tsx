@@ -14,6 +14,7 @@ import { BoardArea } from './BoardArea';
 import { moveSound, useMoveCompare, usePlural, useSound, type CompareSpec, type CompareState } from './hooks';
 import { fenAt, lastMoveAt, linePlies, moveArrow, moveLabel, noteArrows } from './lessonData';
 import { Feedback, Section } from './Shell';
+import { replayStep } from './StudyLine';
 import { Button, Icon, MoveChip, MoveList, RichText, Stat } from './ui';
 
 export type PracticeMode = 'practice' | 'review' | 'exam';
@@ -84,7 +85,8 @@ export function LinePractice({ course, line, mode, startAt = 0, header, onComple
   const [hint, setHint] = useState<0 | 1 | 2>(0);
   const [streak, setStreak] = useState(0);
   const [mistakes, setMistakes] = useState(0);
-  const [result, setResult] = useState<{ r: PracticeResult; xp: number } | null>(null);
+  /** Resultado al terminar, con la XP y el intervalo de repaso calculados antes de registrarlo. */
+  const [result, setResult] = useState<{ r: PracticeResult; xp: number; interval: number } | null>(null);
   const [compare, setCompare] = useState<CompareSpec | null>(null);
   const cmp = useMoveCompare(compare);
   const missed = useRef(new Set<number>());
@@ -101,6 +103,10 @@ export function LinePractice({ course, line, mode, startAt = 0, header, onComple
 
   const completeRef = useRef(onComplete);
   completeRef.current = onComplete;
+  const stateRef = useRef(state);
+  stateRef.current = state;
+  const todayRef = useRef(today);
+  todayRef.current = today;
   const finish = () => {
     if (done.current) return;
     done.current = true;
@@ -112,8 +118,10 @@ export function LinePractice({ course, line, mode, startAt = 0, header, onComple
       userMoves: userPlies,
       firstTry: Math.max(0, userPlies - new Set([...missed.current, ...helped.current]).size),
     };
+    // El intervalo se calcula antes de registrar: después, la tarjeta ya es la nueva.
+    const interval = review(stateRef.current.lines[line.id], gradeOf(r), todayRef.current).interval;
     const xp = completeRef.current(r) || 0;
-    setResult({ r, xp });
+    setResult({ r, xp, interval });
     setPhase('end');
     if (!r.failed) sound('complete');
   };
@@ -125,7 +133,7 @@ export function LinePractice({ course, line, mode, startAt = 0, header, onComple
       setPhase('auto');
       return;
     }
-    const id = setTimeout(() => setCursor((c) => c + 1), cursor === 0 ? 400 : 170);
+    const id = setTimeout(() => setCursor((c) => c + 1), cursor === 0 ? 400 : replayStep(from));
     return () => clearTimeout(id);
   }, [phase, cursor, from]);
 
@@ -150,7 +158,8 @@ export function LinePractice({ course, line, mode, startAt = 0, header, onComple
       cursor === 0 ? 550 : OPPONENT_DELAY,
     );
     return () => clearTimeout(id);
-  }, [phase, cursor]); // eslint-disable-line react-hooks/exhaustive-deps
+    // Solo depende del turno: `plies`, `user` y `n` no cambian durante la línea.
+  }, [phase, cursor]);
 
   // La jugada equivocada se ve un momento y vuelve atrás.
   useEffect(() => {
@@ -288,12 +297,12 @@ export function LinePractice({ course, line, mode, startAt = 0, header, onComple
 
   // Próximo repaso si la línea terminara ahora con la nota actual.
   const gradeNow: Grade = missed.current.size > 0 ? 'again' : helped.current.size > 0 ? 'hard' : 'good';
-  const nextInterval = review(state.lines[line.id], gradeNow, today).interval;
+  const nextInterval = result ? result.interval : review(state.lines[line.id], gradeNow, today).interval;
 
   // --- Feedback ---
   let feedback: ReactNode = null;
   if (phase === 'end' && result) {
-    const { r, xp } = result;
+    const { r, xp, interval } = result;
     const title = exam
       ? t('lesson.practice.examPassed')
       : r.failed
@@ -313,7 +322,7 @@ export function LinePractice({ course, line, mode, startAt = 0, header, onComple
             <RichText text={tx(line.summary)} />
           </p>
         )}
-        {!exam && <p className="cb-feedback-meta">{plural('lesson.practice.nextReview', review(state.lines[line.id], gradeOf(r), today).interval)}</p>}
+        {!exam && <p className="cb-feedback-meta">{plural('lesson.practice.nextReview', interval)}</p>}
       </Feedback>
     );
   } else if (phase === 'paused' && okPly) {

@@ -147,7 +147,11 @@ export function Mountain({ course, statuses, onLocked }: Props) {
                     {status === 'current' && !compact && <span className="app-m-ring" aria-hidden="true" />}
                     {icon}
                     {status === 'current' && (
-                      <span className="app-m-bubble" aria-hidden="true">
+                      <span
+                        className={`app-m-bubble is-${node.bubble.side}`}
+                        style={{ ['--dx' as string]: `${node.bubble.dx}px` }}
+                        aria-hidden="true"
+                      >
                         {t('app.learn.start')}
                       </span>
                     )}

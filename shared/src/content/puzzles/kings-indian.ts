@@ -47,14 +47,14 @@ export const kingsIndianPuzzles: Puzzle[] = [
   {
     id: 'kid-p4',
     moves: '1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.Nf3 O-O 6.Be2 e5 7.d5 a5 8.b4',
-    solution: 'axb4 Nb5 Nxe4',
+    solution: 'axb4',
     theme: { es: 'Atacar al defensor', en: 'Undermining the defender' },
     hint: { es: '¿Qué pieza blanca sostiene el peón de e4? Atácala.', en: 'Which white piece holds the e4-pawn? Attack it.' },
     explanation: {
       es: 'Tu [7...a5] estaba ahí justo para frenar b4. Tras [8.b4?] [8...axb4!] el peón ataca al caballo de c3, que es el único defensor de e4. Si el caballo se va, como en [9.Nb5], [9...Nxe4] se lleva el segundo peón. Cuando no puedas atacar un peón directamente, ataca a la pieza que lo defiende.',
       en: 'Your [7...a5] was there precisely to stop b4. After [8.b4?] [8...axb4!] the pawn hits the c3-knight, the only defender of e4. If the knight leaves, as in [9.Nb5], [9...Nxe4] collects a second pawn. When you cannot attack a pawn directly, attack the piece that defends it.',
     },
-    rating: 1250,
+    rating: 1100,
   },
   {
     id: 'kid-p5',

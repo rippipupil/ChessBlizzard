@@ -155,6 +155,13 @@ export function SparringStage({ course, stage, onExit }: { course: Course; stage
     }
     const task = getEngine().play(fen, level.options);
     let timer: ReturnType<typeof setTimeout> | undefined;
+    // Si el motor falla, el rival juega una jugada legal al azar para no bloquear la partida.
+    const fallback = () => {
+      setEngineError(true);
+      const legal = new Chess(fen).moves({ verbose: true });
+      const pick = legal[Math.floor(Math.random() * legal.length)];
+      return pick ? playOne(fen, pick.from + pick.to + (pick.promotion ?? '')) : null;
+    };
     task.promise.then(
       (uci) => {
         if (!alive) return;
@@ -162,15 +169,15 @@ export function SparringStage({ course, stage, onExit }: { course: Course; stage
         timer = setTimeout(() => {
           if (!alive) return;
           setThinking(false);
-          const m = uci ? playOne(fen, uci) : null;
+          const m = (uci ? playOne(fen, uci) : null) ?? fallback();
           if (m) apply(m, moves);
-          else setEngineError(true);
         }, wait);
       },
       () => {
         if (!alive) return;
         setThinking(false);
-        setEngineError(true);
+        const m = fallback();
+        if (m) apply(m, moves);
       },
     );
     return () => {
@@ -178,7 +185,8 @@ export function SparringStage({ course, stage, onExit }: { course: Course; stage
       if (timer) clearTimeout(timer);
       task.cancel();
     };
-  }, [phase, fen, turn]); // eslint-disable-line react-hooks/exhaustive-deps
+    // El turno del rival depende solo de la posición; el nivel se fija al empezar.
+  }, [phase, fen, turn]);
 
   const onMove = (from: string, to: string, promotion?: string) => {
     if (phase !== 'playing' || turn !== user) return;
@@ -255,7 +263,7 @@ export function SparringStage({ course, stage, onExit }: { course: Course; stage
     return (
       <LessonShell onExit={onExit} progress={progress} xp={xp}>
         <BoardArea board={{ ...board, movable: null }} players={players} onFlip={() => setFlipped((f) => !f)} />
-        <aside className="cb-panel" aria-label={t('lesson.panel.sparring')}>
+        <aside className="cb-panel cb-panel-first" aria-label={t('lesson.panel.sparring')}>
           <PanelHeader kicker={kicker} title={tx(stage.title)}>
             <p className="cb-panel-sub">
               <RichText text={tx(stage.intro)} />

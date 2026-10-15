@@ -1,7 +1,7 @@
 // Piezas de interfaz de las lecciones: iconos, botones, texto con jugadas, lista de jugadas,
 // etiquetas de jugador y leyenda de flechas.
 import { Fragment, useEffect, useRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
-import { localizeSan, parseRichText } from '@chessblizzard/shared';
+import { localizeSan, parseRichText, type NotationStyle } from '@chessblizzard/shared';
 import type { BoardArrowKind } from '../board';
 import type { MoveClass } from '../engine';
 import { useNotation, useT } from '../i18n';
@@ -103,7 +103,18 @@ export function IconButton({ icon, label, className, ...rest }: ButtonHTMLAttrib
 
 // --- Texto ------------------------------------------------------------------
 
-/** Texto con jugadas entre corchetes: las jugadas salen como fichas en la notación elegida. */
+/** Jugadas de pieza escritas sin corchetes ("...Rf7", "Bg5", "O-O"): se traducen igualmente. */
+const LOOSE_MOVE = /(?<![\w\-])((?:\d+\.(?:\.\.)?|\.\.\.)?)([KQRBN][a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|O-O(?:-O)?[+#]?)(?!\w)/g;
+
+function localizeLoose(text: string, notation: NotationStyle): string {
+  if (notation === 'en') return text;
+  return text.replace(LOOSE_MOVE, (_m, num: string, san: string) => num + localizeSan(san, notation));
+}
+
+/**
+ * Texto del contenido: las jugadas entre corchetes salen como fichas en la notación elegida,
+ * y las que se escribieron sin corchetes se traducen igualmente (sin ficha).
+ */
 export function RichText({ text }: { text: string }) {
   const notation = useNotation();
   const segs = parseRichText(text, notation);
@@ -115,12 +126,31 @@ export function RichText({ text }: { text: string }) {
             {s.value}
           </span>
         ) : (
-          <Fragment key={i}>{s.value}</Fragment>
+          <Fragment key={i}>{localizeLoose(s.value, notation)}</Fragment>
         ),
       )}
     </>
   );
 }
+
+/**
+ * Texto de interfaz con una jugada dentro: la jugada no se pasa a mayúsculas aunque el
+ * botón lo haga ("JUEGA TÚ 10...f5", no "10...F5").
+ */
+export function WithMove({ text, move }: { text: string; move: string }) {
+  const i = text.indexOf(MOVE_SLOT);
+  if (i < 0) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, i)}
+      <span className="cb-nocaps">{move}</span>
+      {text.slice(i + MOVE_SLOT.length)}
+    </>
+  );
+}
+
+/** Marcador para pasar a t() en lugar de la jugada y luego sustituirlo con <WithMove>. */
+export const MOVE_SLOT = '\u2063';
 
 /** Una jugada suelta como ficha ("10...Cf5"). */
 export function MoveChip({ text, tone }: { text: string; tone?: 'ok' | 'err' | 'best' }) {

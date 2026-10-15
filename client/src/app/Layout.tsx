@@ -31,7 +31,7 @@ export function useDueCount(): number {
   return useMemo(() => dueLines(courses, state, today).length, [state, today]);
 }
 
-export function Logo() {
+function Logo() {
   const t = useT();
   return (
     <Link to="/" className="app-logo" aria-label={t('app.nav.home')}>

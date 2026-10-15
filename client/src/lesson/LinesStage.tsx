@@ -246,8 +246,9 @@ export function LinesStage({ course, stage, onExit }: { course: Course; stage: L
         }}
         continueLabel={(() => {
           const r = lastResult;
-          const remaining = queue.length - (r && r.lineId === line.id && !r.failed && !r.hinted ? 1 : 0);
-          return remaining > 0 ? t('lesson.practice.nextLine') : t('lesson.continue');
+          const clean = !!r && r.lineId === line.id && !r.failed && !r.hinted;
+          if (!clean && queue.length === 1) return t('lesson.practice.repeatLine');
+          return queue.length - (clean ? 1 : 0) > 0 ? t('lesson.practice.nextLine') : t('lesson.continue');
         })()}
         onContinue={() => {
           const r = lastResult;

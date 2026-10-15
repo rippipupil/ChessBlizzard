@@ -115,17 +115,6 @@ export function useMoveCompare(spec: CompareSpec | null, depth = 13): CompareSta
       task.cancel();
     };
     // `key` resume `spec`: evita relanzar la búsqueda si el objeto cambia pero no su contenido.
-  }, [key, depth]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [key, depth]);
   return state;
-}
-
-/** Ejecuta una función tras `ms` mientras `active` sea true (se cancela al cambiar). */
-export function useTimeout(active: boolean, ms: number, fn: () => void, deps: unknown[] = []) {
-  const ref = useRef(fn);
-  ref.current = fn;
-  useEffect(() => {
-    if (!active) return;
-    const id = setTimeout(() => ref.current(), ms);
-    return () => clearTimeout(id);
-  }, [active, ms, ...deps]); // eslint-disable-line react-hooks/exhaustive-deps
 }

@@ -24,7 +24,7 @@ import { useDocumentTitle, useFormat, usePlural, useSelectedCourse } from '../ho
 import { Icon } from '../icons';
 import { Mountain } from '../mountain/Mountain';
 import { useToast } from '../Toaster';
-import { Bar, GhostTip, StatChips } from '../ui';
+import { Bar, GhostTip, RichText, StatChips, usePlainText } from '../ui';
 
 function useSideText() {
   const t = useT();
@@ -169,7 +169,11 @@ function NextStageCard({ course, flat, statuses }: { course: Course; flat: FlatS
       <h2 id="app-next-title" className="app-h2">
         {tx(stage.title)}
       </h2>
-      {(tx(stage.intro) || tx(stage.subtitle)) && <p className="app-card-text app-next-intro">{tx(stage.intro) || tx(stage.subtitle)}</p>}
+      {(tx(stage.intro) || tx(stage.subtitle)) && (
+        <p className="app-card-text app-next-intro">
+          <RichText text={tx(stage.intro) || tx(stage.subtitle)} />
+        </p>
+      )}
       <Link to={`/curso/${course.id}/${stage.id}`} className="app-btn app-btn--primary">
         {t('app.learn.startXp', { xp: XP.stage })}
       </Link>
@@ -180,6 +184,7 @@ function NextStageCard({ course, flat, statuses }: { course: Course; flat: FlatS
 function ReviewTodayCard({ state, today }: { state: ProgressState; today: string }) {
   const t = useT();
   const tx = useTx();
+  const plain = usePlainText();
   const plural = usePlural();
   const due = useMemo(() => dueLines(courses, state, today), [state, today]);
   const learned = Object.keys(state.lines).length;
@@ -204,7 +209,7 @@ function ReviewTodayCard({ state, today }: { state: ProgressState; today: string
               const line = d.course.lines.find((l) => l.id === d.lineId);
               return (
                 <li key={d.lineId}>
-                  <span className="app-due-name">{line ? tx(line.name) : d.lineId}</span>
+                  <span className="app-due-name">{line ? plain(tx(line.name)) : d.lineId}</span>
                   <span className="app-due-course">{tx(d.course.name)}</span>
                 </li>
               );
@@ -254,6 +259,59 @@ function useTip(course: Course, statuses: StageStatus[], dueCount: number, today
   if (next?.type === 'exam') return t('app.tip.exam');
   const day = Number(today.slice(8, 10)) || 0;
   return t(`app.tip.general.${day % 4}`);
+}
+
+const REF_ICONS = { book: 'book', game: 'puzzle', player: 'user' } as const;
+
+/** Sobre la apertura: lema, historia y lecturas recomendadas del curso. */
+function CourseInfoCard({ course }: { course: Course }) {
+  const t = useT();
+  const tx = useTx();
+  const tagline = tx(course.tagline);
+  const history = tx(course.history);
+  if (!tagline && !history && course.references.length === 0) return null;
+  return (
+    <section className="app-card app-course-info" aria-labelledby="app-course-info-title">
+      <span className="app-card-eyebrow app-tx2">{t('app.learn.about')}</span>
+      <h2 id="app-course-info-title" className="app-h3">
+        {tx(course.name)}
+        {course.eco && <span className="app-eco">{course.eco}</span>}
+      </h2>
+      {tagline && (
+        <p className="app-card-text">
+          <RichText text={tagline} />
+        </p>
+      )}
+      {history && (
+        <details className="app-details">
+          <summary>{t('app.learn.history')}</summary>
+          <p className="app-card-text">
+            <RichText text={history} />
+          </p>
+        </details>
+      )}
+      {course.references.length > 0 && (
+        <details className="app-details">
+          <summary>{t('app.learn.references', { n: course.references.length })}</summary>
+          <ul className="app-refs">
+            {course.references.map((r) => (
+              <li key={`${r.kind}-${r.title}`}>
+                <Icon name={REF_ICONS[r.kind]} size={16} />
+                <span>
+                  <strong>{r.title}</strong>
+                  {r.author && <span className="app-tx2"> · {r.author}</span>}
+                  {r.year && <span className="app-tx2"> ({r.year})</span>}
+                  <span className="app-ref-note">
+                    <RichText text={tx(r.note)} />
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+    </section>
+  );
 }
 
 function GuestBanner({ show }: { show: boolean }) {
@@ -362,6 +420,7 @@ export default function LearnPage() {
         <ReviewTodayCard state={state} today={today} />
         <DailyGoalCard state={state} today={today} />
         <GhostTip text={tip} />
+        <CourseInfoCard course={course} />
       </aside>
     </div>
   );

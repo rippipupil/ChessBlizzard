@@ -1206,6 +1206,94 @@
   display: none;
 }
 
+/* Jugadas dentro de los textos del contenido (RichText) */
+.app-move {
+  display: inline-block;
+  padding: 0 5px;
+  border-radius: 6px;
+  background: var(--s3);
+  color: var(--tx);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Sobre la apertura */
+.app-course-info .app-h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+}
+.app-eco {
+  color: var(--tx3);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.app-details {
+  border-top: 1px solid var(--bd);
+  padding-top: 10px;
+}
+.app-details > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+  border-radius: 8px;
+  color: var(--tx);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+.app-details > summary::-webkit-details-marker {
+  display: none;
+}
+.app-details > summary::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  margin-right: 4px;
+  border-right: 2px solid var(--tx2);
+  border-bottom: 2px solid var(--tx2);
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 0.15s var(--ease);
+}
+.app-details[open] > summary::after {
+  transform: rotate(225deg) translateY(-2px);
+}
+.app-details > p,
+.app-details > ul {
+  margin-top: 8px;
+}
+.app-refs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.app-refs li {
+  display: flex;
+  gap: 8px;
+}
+.app-refs li > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--accent-text);
+}
+.app-ref-note {
+  display: block;
+  margin-top: 2px;
+  color: var(--tx2);
+  font-size: 13px;
+}
+
 /* Selector de curso (móvil) */
 .app-picker {
   position: relative;
@@ -1527,7 +1615,7 @@
   left: 50%;
   bottom: calc(100% + 17px);
   width: 112px;
-  margin-left: -56px;
+  margin-left: calc(-56px + var(--dx, 0px));
   padding: 6px 0;
   border: 2px solid var(--bd);
   border-radius: 10px;
@@ -1545,10 +1633,24 @@
 .is-compact .app-m-bubble {
   bottom: calc(100% + 9px);
   width: 96px;
-  margin-left: -48px;
+  margin-left: calc(-48px + var(--dx, 0px));
   padding: 5px 0;
   border-radius: 9px;
   font-size: 12px;
+}
+.app-m-bubble.is-left,
+.app-m-bubble.is-right {
+  top: 50%;
+  bottom: auto;
+  margin-top: -15px;
+  margin-left: 0;
+}
+.app-m-bubble.is-left {
+  left: auto;
+  right: calc(100% + 10px);
+}
+.app-m-bubble.is-right {
+  left: calc(100% + 10px);
 }
 @keyframes app-bob {
   0%,
@@ -2337,7 +2439,7 @@ button.app-theme-card:hover {
   padding-right: 52px;
 }
 .app-input:focus {
-  border-color: var(--accent);
+  border-color: var(--accent-text);
 }
 .app-field.is-invalid .app-input {
   border-color: var(--err);
@@ -2394,6 +2496,14 @@ button.app-theme-card:hover {
 }
 
 /* ---------- Responsive ---------- */
+@media (min-width: 900px) {
+  .app-bd-sign--bars {
+    top: auto;
+    bottom: 30%;
+    left: calc(240px + 2.5%);
+  }
+}
+
 @media (max-width: 1185px) {
   .app-learn-aside {
     flex-basis: 100%;
@@ -2417,7 +2527,8 @@ button.app-theme-card:hover {
 }
 
 @media (max-width: 899px) {
-  .app-side {
+  .app-side,
+  .app-bd-sign--bars {
     display: none;
   }
   .app-bottom {
@@ -2491,9 +2602,17 @@ button.app-theme-card:hover {
     gap: 8px;
   }
   .app-course-tabs,
-  .app-learn-title,
   .app-learn-chips {
     display: none;
+  }
+  /* El nombre del curso ya se ve en el selector: el título queda solo para lectores de pantalla. */
+  .app-learn-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
   .app-learn-progress {
     width: 100%;
@@ -2551,6 +2670,12 @@ button.app-theme-card:hover {
 @media (max-width: 640px) {
   .app-theme-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .app-thumb--soon {
+    height: 76px;
+  }
+  .app-thumb--soon .app-thumb-board {
+    display: none;
   }
   .app-palette {
     grid-template-columns: repeat(3, minmax(0, 1fr));

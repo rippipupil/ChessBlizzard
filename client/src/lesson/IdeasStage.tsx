@@ -73,6 +73,8 @@ export function IdeasStage({ course, stage, onExit }: { course: Course; stage: I
   const [xp, setXp] = useState(0);
   const missed = useRef(new Set<number>());
   const solved = useRef(new Set<number>());
+  /** Preguntas ya mostradas al menos una vez (para "Pregunta 2 de 4"). */
+  const seen = useRef(new Set<number>());
   const completed = useRef(false);
 
   const complete = () => {
@@ -87,7 +89,7 @@ export function IdeasStage({ course, stage, onExit }: { course: Course; stage: I
 
   useEffect(() => {
     if (phase === 'quiz' && quiz.length === 0) complete();
-  }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [phase]);
 
   const total = Math.max(1, slides.length + quiz.length);
   const kicker = `${tx(course.name)} · ${camp ? tx(camp.name) : ''}`;
@@ -98,7 +100,11 @@ export function IdeasStage({ course, stage, onExit }: { course: Course; stage: I
     right = t('lesson.ideas.slideOf', { i: slideIdx + 1, n: slides.length });
   } else if (phase === 'quiz') {
     value = (slides.length + solved.current.size) / total;
-    right = t('lesson.ideas.questionOf', { i: Math.min(quiz.length, solved.current.size + 1), n: quiz.length });
+    const current = queue[0];
+    if (current !== undefined) seen.current.add(current);
+    right = current !== undefined && missed.current.has(current) && seen.current.size === quiz.length && !answer
+      ? t('lesson.quiz.again')
+      : t('lesson.ideas.questionOf', { i: Math.min(quiz.length, seen.current.size), n: quiz.length });
   }
   const progress = { label: `${tx(course.name)} · ${tx(stage.title)}`, right, value };
 
@@ -346,6 +352,8 @@ function QuizView({
   const tx = useTx();
   const pos = useMemo(() => positionOf(item), [item]);
   const toMove = sideToMove(pos.fen);
+  // Se decide al mostrar la pregunta: si se falla ahora, la etiqueta no cambia hasta que vuelva.
+  const [isRetry] = useState(retry);
 
   // Atajos 1–4 para las opciones.
   useEffect(() => {
@@ -436,7 +444,7 @@ function QuizView({
       />
       <aside className="cb-panel" aria-label={t('lesson.panel.quiz')}>
         {header}
-        <Section label={retry ? t('lesson.quiz.again') : item.kind === 'move' ? t('lesson.quiz.findMove') : t('lesson.quiz.choose')}>
+        <Section label={isRetry ? t('lesson.quiz.again') : item.kind === 'move' ? t('lesson.quiz.findMove') : t('lesson.quiz.choose')}>
           <p className="cb-question">
             <RichText text={tx(item.question)} />
           </p>

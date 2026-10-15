@@ -157,6 +157,7 @@ export const lessonStrings: Dict = {
   'lesson.practice.lineOf': { es: 'Línea {i} de {n}', en: 'Line {i} of {n}' },
   'lesson.practice.retryLine': { es: 'Repite esta línea: esta vez sin fallos ni pistas.', en: 'Repeat this line: this time without mistakes or hints.' },
   'lesson.practice.nextLine': { es: 'Siguiente línea', en: 'Next line' },
+  'lesson.practice.repeatLine': { es: 'Repetir la línea', en: 'Repeat the line' },
   'lesson.practice.none': {
     es: 'Esta etapa no tiene líneas para practicar: con estudiarlas basta.',
     en: 'This stage has no lines to practise: studying them is enough.',
@@ -221,6 +222,7 @@ export const lessonStrings: Dict = {
   'lesson.puzzle.notSolved': { es: 'Puzzle no resuelto', en: 'Puzzle not solved' },
   'lesson.puzzle.failedText': { es: 'Repasa la solución: la próxima vez saldrá.', en: 'Look over the solution: next time you will get it.' },
   'lesson.puzzle.examFailed': { es: 'Puzzle fallado', en: 'Puzzle failed' },
+  'lesson.puzzle.examFailedText': { es: 'Esta pregunta no cuenta. La flecha verde marca la jugada buena.', en: 'This question does not count. The green arrow shows the right move.' },
   'lesson.puzzle.revealing': { es: 'Mostrando la solución…', en: 'Showing the solution…' },
   'lesson.puzzle.show': { es: 'Ver la solución', en: 'Show solution' },
   'lesson.puzzle.solution': { es: 'Solución:', en: 'Solution:' },

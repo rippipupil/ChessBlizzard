@@ -221,7 +221,8 @@ function DevApp() {
     if (mode) patch.colorMode = mode;
     if (Object.keys(patch).length) update(patch);
     (window as unknown as { cbEngine: unknown }).cbEngine = getEngine();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // Solo al cargar la página.
+  }, []);
 
   const view = params.get('view');
   const course = getCourse(params.get('course') ?? 'kings-indian') ?? courses[0];
@@ -260,7 +261,10 @@ function DevApp() {
   );
 }
 
-createRoot(document.getElementById('root')!).render(
+// Con la recarga en caliente de Vite el módulo puede volver a ejecutarse: reutilizamos la raíz.
+const w = window as unknown as { cbRoot?: ReturnType<typeof createRoot> };
+w.cbRoot ??= createRoot(document.getElementById('root')!);
+w.cbRoot.render(
   <StrictMode>
     <SettingsProvider>
       <ProgressProvider>

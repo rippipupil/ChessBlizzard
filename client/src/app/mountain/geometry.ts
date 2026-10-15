@@ -42,6 +42,10 @@ export interface MountainSpec {
   peakN: number;
   peakTooth: [number, number];
   flag: { pole: number; w: number; h: number };
+  /** Aviso "EMPEZAR" sobre la etapa actual: ancho, alto y separación del nodo. */
+  bubble: { w: number; h: number; gap: number };
+  /** Hay etiquetas a los lados de los nodos (si no, el aviso puede ir al costado). */
+  labels: boolean;
   /** Línea de cota de los campamentos: x inicial. */
   contourX: number;
   /** Etiqueta del campamento base: distancia bajo la primera etapa. */
@@ -84,6 +88,8 @@ export const FULL_SPEC: MountainSpec = {
   peakN: 8,
   peakTooth: [8, 12],
   flag: { pole: 54, w: 33, h: 22 },
+  bubble: { w: 112, h: 32, gap: 17 },
+  labels: true,
   contourX: 40,
   baseDy: 40,
   jitter: 4,
@@ -123,6 +129,8 @@ export const COMPACT_SPEC: MountainSpec = {
   peakN: 6,
   peakTooth: [5, 8],
   flag: { pole: 38, w: 25, h: 15 },
+  bubble: { w: 96, h: 29, gap: 9 },
+  labels: false,
   contourX: 8,
   baseDy: 30,
   jitter: 2,
@@ -137,6 +145,8 @@ export interface MountainNode {
   /** La etiqueta va a la izquierda del nodo. */
   left: boolean;
   summit: boolean;
+  /** Aviso "EMPEZAR": encima (desplazado dx para no tapar el nodo siguiente ni la bandera) o al costado. */
+  bubble: { side: 'top' | 'left' | 'right'; dx: number };
 }
 
 export interface MountainCamp {
@@ -191,6 +201,37 @@ function trail(points: Array<[number, number]>, a: number, b: number): string {
       `${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
   }
   return d;
+}
+
+/** Dónde va el aviso "EMPEZAR" de la etapa i para que no choque con nada. */
+function placeBubble(spec: MountainSpec, points: Array<[number, number]>, i: number, r: number): MountainNode['bubble'] {
+  const { w, h, gap } = spec.bubble;
+  const [cx, cy] = points[i];
+  const margin = 8;
+  const maxShift = w / 2 - 12;
+  let dx = 0;
+  if (i === points.length - 1) {
+    // En la cumbre el mástil y la bandera quedan justo encima: el aviso va a su izquierda.
+    dx = -(w / 2 + margin);
+  } else {
+    const [nx, ny] = points[i + 1];
+    const nr = i + 1 === points.length - 1 ? spec.rSummit : spec.r;
+    const bottom = cy - r - 3 - gap;
+    const top = bottom - h;
+    if (top < ny + nr + 6 && bottom > ny - nr - 3) {
+      dx = nx >= cx ? Math.min(0, nx - nr - margin - (cx + w / 2)) : Math.max(0, nx + nr + margin - (cx - w / 2));
+      if (Math.abs(dx) > maxShift) {
+        // No cabe encima: sin etiquetas, al costado contrario al nodo siguiente.
+        if (!spec.labels) return { side: nx >= cx ? 'left' : 'right', dx: 0 };
+        dx = Math.sign(dx) * maxShift;
+      }
+    }
+  }
+  // Sin salirse del lienzo.
+  const x = spec.ox + cx + dx;
+  if (x - w / 2 < 4) dx += 4 - (x - w / 2);
+  if (x + w / 2 > spec.width - 4) dx -= x + w / 2 - (spec.width - 4);
+  return { side: 'top', dx: Math.round(dx) };
 }
 
 /**
@@ -286,7 +327,8 @@ export function buildMountain(spec: MountainSpec, campSizes: number[], current: 
   });
   const nodes: MountainNode[] = points.map(([x, y], i) => {
     const summit = i === n - 1;
-    return { x: ox + x, y, r: summit ? spec.rSummit : spec.r, left: !summit && x < AX, summit };
+    const r = summit ? spec.rSummit : spec.r;
+    return { x: ox + x, y, r, left: !summit && x < AX, summit, bubble: placeBubble(spec, points, i, r) };
   });
 
   const cur = current < 0 ? n - 1 : current;

@@ -11,7 +11,12 @@ import { BoardArea } from './BoardArea';
 import { moveSound, useKeyNav, useSound } from './hooks';
 import { alternativesAt, arrowText, fenAt, firstBook, lastMoveAt, linePlies, moveArrow, moveLabel, noteArrows } from './lessonData';
 import { Comment, Section } from './Shell';
-import { Button, Icon, IdeaChip, MoveList, RichText } from './ui';
+import { Button, Icon, IdeaChip, MOVE_SLOT, MoveList, RichText, WithMove } from './ui';
+
+/** Pausa entre jugadas al reproducir el tronco común: el total ronda los 2,6 s. */
+export function replayStep(plies: number): number {
+  return Math.max(70, Math.min(190, Math.round(2600 / Math.max(1, plies))));
+}
 
 export interface StudyLineProps {
   course: Course;
@@ -54,7 +59,7 @@ export function StudyLine({ course, line, newFrom, header, onFinished, onProgres
       setReplay(false);
       return;
     }
-    const id = setTimeout(() => setCursor((c) => c + 1), cursor === 0 ? 450 : 190);
+    const id = setTimeout(() => setCursor((c) => c + 1), cursor === 0 ? 450 : replayStep(startCursor));
     return () => clearTimeout(id);
   }, [replay, cursor, startCursor]);
 
@@ -191,7 +196,7 @@ export function StudyLine({ course, line, newFrom, header, onFinished, onProgres
   } else if (lastPly) {
     const mine = lastPly.color === user;
     comment = (
-      <Comment mood={mine ? 'happy' : 'neutral'} title={`${moveLabel(lastPly, notation)} · ${t(mine ? 'lesson.study.byYou' : 'lesson.study.byRival', { side: rivalLower })}`}>
+      <Comment mood={mine ? (line.practice === false ? 'thinking' : 'happy') : 'neutral'} title={`${moveLabel(lastPly, notation)} · ${t(mine ? 'lesson.study.byYou' : 'lesson.study.byRival', { side: rivalLower })}`}>
         <p className="cb-text">
           {lastPly.note?.text ? (
             <RichText text={tx(lastPly.note.text)} />
@@ -210,7 +215,7 @@ export function StudyLine({ course, line, newFrom, header, onFinished, onProgres
     else if (preview && nextPly)
       cta = (
         <Button variant="primary" block onClick={() => go(cursor + 1)}>
-          {t('lesson.study.playIt', { move: moveLabel(nextPly, notation) })}
+          <WithMove text={t('lesson.study.playIt', { move: MOVE_SLOT })} move={moveLabel(nextPly, notation)} />
         </Button>
       );
     else

@@ -50,7 +50,8 @@ export function ExamStage({ course, stage, onExit }: { course: Course; stage: Ex
   const { record } = useProgress();
   const camp = campOf(course, stage.id);
   const [round, setRound] = useState(0);
-  const questions = useMemo(() => buildExam(course, stage), [course, stage, round]); // eslint-disable-line react-hooks/exhaustive-deps
+  // `round` fuerza un sorteo nuevo de preguntas al repetir el examen.
+  const questions = useMemo(() => buildExam(course, stage), [course, stage, round]);
   const [phase, setPhase] = useState<'intro' | 'question' | 'result'>('intro');
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<boolean[]>([]);

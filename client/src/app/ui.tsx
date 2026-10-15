@@ -1,12 +1,39 @@
 // Piezas de interfaz comunes a las páginas de la aplicación.
-import { useRef, type KeyboardEvent, type ReactNode } from 'react';
-import { currentStreak, levelInfo } from '@chessblizzard/shared';
-import { useT } from '../i18n';
+import { useCallback, useRef, type KeyboardEvent, type ReactNode } from 'react';
+import { currentStreak, levelInfo, parseRichText, plainText } from '@chessblizzard/shared';
+import { useNotation, useT } from '../i18n';
 import { useProgress } from '../state/progress';
 import { useSettings } from '../state/settings';
 import { Ghost, ghostName, type GhostMood } from '../theme/Ghost';
 import { useFormat, usePlural } from './hooks';
 import { Icon } from './icons';
+
+/**
+ * Texto del contenido con las jugadas entre corchetes ("[9...Nd7]") pintadas como chips en
+ * la notación elegida (C A T D R o N B R Q K).
+ */
+export function RichText({ text }: { text: string }) {
+  const notation = useNotation();
+  return (
+    <>
+      {parseRichText(text, notation).map((seg, i) =>
+        seg.kind === 'move' ? (
+          <span key={i} className="app-move">
+            {seg.value}
+          </span>
+        ) : (
+          seg.value
+        ),
+      )}
+    </>
+  );
+}
+
+/** Lo mismo como texto plano (para avisos, títulos y aria-label). */
+export function usePlainText() {
+  const notation = useNotation();
+  return useCallback((text: string) => plainText(text, notation), [notation]);
+}
 
 /** Barra de progreso accesible. `ratio` entre 0 y 1. */
 export function Bar({

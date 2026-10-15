@@ -6,7 +6,8 @@
 /* ---------- Marco ---------- */
 
 .cb-lesson {
-  --cb-board-size: clamp(300px, calc(100dvh - 250px), 620px);
+  /* Cabe con la barra de feedback abierta también en portátiles de 768 px de alto. */
+  --cb-board-size: clamp(300px, calc(100dvh - 270px), 620px);
   position: relative;
   min-height: 100dvh;
   display: flex;
@@ -178,7 +179,9 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  box-shadow: 0 4px 0 var(--accent-lip);
+  box-shadow:
+    0 4px 0 var(--accent-lip),
+    var(--glow);
 }
 
 .cb-btn-primary:hover:not(:disabled) {
@@ -189,12 +192,6 @@
 .cb-btn-primary:active:not(:disabled) {
   transform: translateY(2px);
   box-shadow: 0 2px 0 var(--accent-lip);
-}
-
-[data-theme='neon'] .cb-btn-primary {
-  box-shadow:
-    0 4px 0 var(--accent-lip),
-    0 0 22px var(--accent-glow);
 }
 
 .cb-btn-ghost {
@@ -244,6 +241,12 @@
   color: var(--accent-text);
   font-weight: 600;
   font-size: 13px;
+}
+
+/* Jugadas dentro de botones en mayúsculas: se dejan como se escriben. */
+.cb-nocaps {
+  text-transform: none;
+  letter-spacing: 0.02em;
 }
 
 /* ---------- Columna del tablero ---------- */
@@ -417,6 +420,7 @@
 .cb-flip {
   flex-shrink: 0;
   width: 54px;
+  min-height: 54px;
   border-radius: var(--radius-m);
   border: 1px solid var(--bd);
   background: var(--s1);
@@ -488,7 +492,7 @@
   gap: 4px;
   padding: 4px;
   border-radius: var(--radius-m);
-  background: color-mix(in srgb, var(--bg) 60%, var(--s1));
+  background: var(--inset);
   border: 1px solid var(--bd);
 }
 
@@ -507,7 +511,7 @@
 }
 
 .cb-tab[aria-selected='true'] {
-  background: var(--s3);
+  background: var(--seg-on);
   color: var(--tx);
   font-weight: 600;
   box-shadow: inset 0 -2px 0 var(--accent);
@@ -607,7 +611,7 @@
 }
 
 .cb-text-warn {
-  color: var(--warn);
+  color: var(--warn-text);
 }
 
 .cb-text-err {
@@ -620,7 +624,7 @@
 
 .cb-text svg {
   vertical-align: -3px;
-  color: var(--warn);
+  color: var(--warn-text);
 }
 
 .cb-context {
@@ -815,7 +819,7 @@ button.cb-move-cur:hover {
 }
 
 .cb-move-inaccuracy .cb-move-glyph {
-  color: var(--warn);
+  color: var(--warn-text);
 }
 
 .cb-move-mistake .cb-move-glyph,
@@ -829,6 +833,12 @@ button.cb-move-cur:hover {
 
 .cb-move-cur .cb-move-glyph {
   color: inherit;
+}
+
+/* La jugada actual manda sobre el color de su clasificación. */
+.cb-move.cb-move-cur {
+  background: var(--ok);
+  color: var(--done-ink);
 }
 
 /* ---------- ¿Y si...? ---------- */
@@ -983,7 +993,7 @@ button.cb-move-cur:hover {
 }
 
 .cb-stat-warn {
-  color: var(--warn);
+  color: var(--warn-text);
 }
 
 .cb-stat-err {
@@ -1107,7 +1117,7 @@ button.cb-move-cur:hover {
 }
 
 .cb-feedback-info .cb-feedback-icon {
-  color: var(--warn);
+  color: var(--warn-text);
 }
 
 .cb-feedback-title {
@@ -1310,7 +1320,7 @@ button.cb-move-cur:hover {
 /* ---------- Pantallas de resultado y estados vacíos ---------- */
 
 .cb-lesson-main-wide {
-  align-items: stretch;
+  align-items: center;
 }
 
 .cb-complete,
@@ -1475,7 +1485,7 @@ button.cb-move-cur:hover {
 }
 
 .cb-review-next {
-  color: var(--warn);
+  color: var(--warn-text);
   font-size: 13px;
   white-space: nowrap;
 }
@@ -1682,7 +1692,7 @@ button.cb-move-cur:hover {
   width: 42px;
   height: 24px;
   border-radius: 999px;
-  background: var(--s3);
+  background: var(--switch-off);
   border: 1px solid var(--bd);
   transition: background 150ms ease;
 }
@@ -1695,7 +1705,7 @@ button.cb-move-cur:hover {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--tx2);
+  background: var(--switch-knob-off);
   transition:
     transform 150ms var(--ease),
     background 150ms ease;
@@ -1856,7 +1866,7 @@ button.cb-move-cur:hover {
 }
 
 .cb-better-inaccuracy {
-  color: var(--warn);
+  color: var(--warn-text);
 }
 
 .cb-better-mistake,
@@ -1951,7 +1961,7 @@ button.cb-move-cur:hover {
 }
 
 .cb-count-inaccuracy b {
-  color: var(--warn);
+  color: var(--warn-text);
 }
 
 .cb-count-mistake b,
@@ -2049,6 +2059,11 @@ button.cb-move-cur:hover {
     max-width: none;
   }
 
+  /* Pantallas de preparación: en móvil, primero las opciones y el botón. */
+  .cb-panel-first {
+    order: -1;
+  }
+
   .cb-panel-head {
     padding: 16px 16px 14px;
     gap: 12px;
@@ -2134,6 +2149,13 @@ button.cb-move-cur:hover {
   }
 
   .cb-review-sum {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  /* Listas largas (análisis, sparring): una columna para que quepan los símbolos. */
+  .cb-moves-scroll {
     grid-template-columns: minmax(0, 1fr);
   }
 }

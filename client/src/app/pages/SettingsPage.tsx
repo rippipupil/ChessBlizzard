@@ -264,8 +264,21 @@ function BoardPreview() {
   const { settings } = useSettings();
   const rows = PREVIEW_FEN.split('/').map((row) => row.replace(/\d/g, (d) => '.'.repeat(Number(d))).split(''));
   const center = (sq: string) => ({ x: FILES.indexOf(sq[0]) * 12.5 + 6.25, y: (8 - Number(sq[1])) * 12.5 + 6.25 });
+  // Flecha del plan de ejemplo (...e7-e5): el asta acaba donde empieza la punta.
   const from = center('e7');
   const to = center('e5');
+  const len = Math.hypot(to.x - from.x, to.y - from.y);
+  const ux = (to.x - from.x) / len;
+  const uy = (to.y - from.y) / len;
+  const tip = { x: to.x + ux * 2, y: to.y + uy * 2 };
+  const base = { x: tip.x - ux * 7, y: tip.y - uy * 7 };
+  const head = [
+    [base.x - uy * 4.5, base.y + ux * 4.5],
+    [tip.x, tip.y],
+    [base.x + uy * 4.5, base.y - ux * 4.5],
+  ]
+    .map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`)
+    .join(' ');
   return (
     <section className="app-card app-settings-card" aria-labelledby="app-h-board-preview">
       <div className="app-section-head">
@@ -291,8 +304,8 @@ function BoardPreview() {
         )}
         {settings.planArrows && (
           <svg className="app-mini-arrows" viewBox="0 0 100 100" focusable="false">
-            <line x1={from.x} y1={from.y + 3} x2={to.x} y2={to.y + 5.5} />
-            <polygon points={`${to.x - 4},${to.y + 5.5} ${to.x},${to.y + 0.5} ${to.x + 4},${to.y + 5.5}`} />
+            <line x1={from.x + ux * 3} y1={from.y + uy * 3} x2={base.x} y2={base.y} />
+            <polygon points={head} />
           </svg>
         )}
       </div>

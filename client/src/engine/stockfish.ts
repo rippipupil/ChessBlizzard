@@ -8,6 +8,7 @@
 //    cuanto llega cualquier otra petición, para que la jugada del sparring o una
 //    comparación no tengan que esperar.
 // Las evaluaciones se devuelven siempre desde el punto de vista de las blancas.
+import { pvToSan } from '../board/chess';
 
 export interface EngineLine {
   multipv: number;
@@ -18,6 +19,8 @@ export interface EngineLine {
   mate?: number;
   /** Variante principal en UCI ("e2e4", "e7e8q"). */
   pv: string[];
+  /** La misma variante en SAN inglés (en el resultado final; en directo la añade useAnalysis). */
+  san?: string[];
 }
 
 export interface EngineResult {
@@ -182,8 +185,15 @@ export class StockfishEngine {
   }
 
   private finish(job: Job, best: string | null) {
-    const lines = [...job.lines.values()].sort((a, b) => a.multipv - b.multipv);
+    const lines = [...job.lines.values()]
+      .sort((a, b) => a.multipv - b.multipv)
+      .map((l) => ({ ...l, san: pvToSan(job.fen, l.pv, 16) }));
     job.resolve({ lines, best, cancelled: job.cancelled });
+  }
+
+  /** Detiene la búsqueda en curso y descarta las que esperan en la cola. */
+  stop() {
+    for (const job of [...this.queue, this.current]) if (job) this.cancelJob(job);
   }
 
   private async pump() {

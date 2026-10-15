@@ -1,7 +1,7 @@
 // Tablero de ajedrez propio: casillas en una cuadrícula, piezas SVG (<use href="#cb-piece-x">)
 // en una capa que se anima, flechas y marcas en un SVG encima, y movimiento con clic o
 // arrastre (Pointer Events: ratón y táctil) o con el teclado.
-import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent, type MutableRefObject, type PointerEvent as ReactPointerEvent } from 'react';
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type MutableRefObject, type PointerEvent as ReactPointerEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { parseArrow } from '@chessblizzard/shared';
 import { useT } from '../i18n';
@@ -17,7 +17,8 @@ import {
   type BoardPiece,
   type Orientation,
 } from './geometry';
-import { PieceSprite, type PieceColor, type PieceType } from './pieces';
+import type { PieceColor, PieceType } from './pieces';
+import { ensurePieceSprite } from './sprite';
 import './board.css';
 
 export type { Orientation } from './geometry';
@@ -182,6 +183,8 @@ export function Board({
   const showLast = highlightLastMove ?? settings.highlightLastMove;
 
   const pieces = useMemo(() => parsePlacement(fen), [fen]);
+  // Los símbolos de las piezas se definen una sola vez en el documento (antes de pintar).
+  useLayoutEffect(ensurePieceSprite, []);
 
   const idRef = useRef(0);
   const droppedRef = useRef<string | null>(null);
@@ -239,7 +242,7 @@ export function Board({
     onMove?.(from, to);
   }
 
-  /** Un "clic" (ratón, toque o Intro) sobre una casilla. Devuelve true si empieza una selección. */
+  /** Un "clic" (ratón, toque o Intro) sobre una casilla: mueve, selecciona o deselecciona. */
   function activate(sq: string): 'moved' | 'selected' | 'none' {
     if (sel && sel !== sq && selDests.includes(sq)) {
       commitMove(sel, sq);
@@ -454,7 +457,6 @@ export function Board({
       onBlur={() => setCursor(null)}
       onContextMenu={(e) => e.preventDefault()}
     >
-      <PieceSprite />
       <div className="cb-squares">{rows}</div>
 
       <div className="cb-pieces" aria-hidden="true">

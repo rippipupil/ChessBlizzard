@@ -20,7 +20,8 @@ button {
   cursor: pointer;
 }
 
+/* --accent-text tiene contraste suficiente en todos los temas y modos (también en claro). */
 :focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--accent-text);
   outline-offset: 2px;
 }

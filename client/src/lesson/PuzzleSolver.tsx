@@ -90,7 +90,7 @@ export function PuzzleSolver({ puzzle, course, onDone, mode = 'normal', recordAt
       setPhase('user');
     }, 700);
     return () => clearTimeout(id);
-  }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [phase]);
 
   // Respuesta automática del rival y reproducción de la solución.
   useEffect(() => {
@@ -112,7 +112,8 @@ export function PuzzleSolver({ puzzle, course, onDone, mode = 'normal', recordAt
       phase === 'reveal' ? 750 : 550,
     );
     return () => clearTimeout(id);
-  }, [phase, cursor]); // eslint-disable-line react-hooks/exhaustive-deps
+    // Solo depende del turno: la solución no cambia mientras se resuelve.
+  }, [phase, cursor]);
 
   // La jugada equivocada se ve un momento.
   useEffect(() => {
@@ -122,7 +123,7 @@ export function PuzzleSolver({ puzzle, course, onDone, mode = 'normal', recordAt
       if (phase === 'wrong') setPhase(exam ? 'end' : 'user');
     }, 750);
     return () => clearTimeout(id);
-  }, [wrong]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [wrong]);
 
   const fenNow = cursor > 0 ? setup.solution[cursor - 1].fenAfter : setup.fen;
   const next = setup.solution[cursor];
@@ -197,7 +198,8 @@ export function PuzzleSolver({ puzzle, course, onDone, mode = 'normal', recordAt
   // --- Panel ---
   let status: ReactNode;
   if (setup.error) status = <p className="cb-text">{t('lesson.puzzle.broken')}</p>;
-  else if (phase === 'end') status = <p className="cb-prompt">{solvedNow ? t('lesson.puzzle.solvedText') : t('lesson.puzzle.failedText')}</p>;
+  else if (phase === 'end')
+    status = <p className="cb-prompt">{solvedNow ? t('lesson.puzzle.solvedText') : exam ? t('lesson.puzzle.examFailedText') : t('lesson.puzzle.failedText')}</p>;
   else if (phase === 'reveal') status = <p className="cb-prompt">{t('lesson.puzzle.revealing')}</p>;
   else if (phase === 'auto' || phase === 'intro') status = <p className="cb-prompt cb-thinking">{t('lesson.puzzle.theyMove', { side: rivalLower })}</p>;
   else

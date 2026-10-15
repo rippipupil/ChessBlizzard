@@ -8,7 +8,7 @@ import { useProgress } from '../../state/progress';
 import { useDocumentTitle, useFormat, usePlural } from '../hooks';
 import { Icon } from '../icons';
 import { useToast } from '../Toaster';
-import { Bar, EmptyState, Loading, PageHeader, RadioGroup } from '../ui';
+import { Bar, EmptyState, Loading, PageHeader, RadioGroup, usePlainText } from '../ui';
 
 const PuzzleSolver = lazy(() => import('../../lesson').then((m) => ({ default: m.PuzzleSolver })));
 
@@ -17,21 +17,22 @@ type Filter = 'all' | 'pending' | 'solved';
 function PuzzleView({ course, puzzle, onClose }: { course: Course; puzzle: Puzzle; onClose(): void }) {
   const t = useT();
   const tx = useTx();
+  const plain = usePlainText();
   const toast = useToast();
-  useDocumentTitle(`${tx(puzzle.theme)} · ${t('app.nav.puzzles')}`);
+  useDocumentTitle(`${plain(tx(puzzle.theme))} · ${t('app.nav.puzzles')}`);
+  const ordered = course.puzzles.slice().sort((a, b) => a.rating - b.rating);
   return (
-    <div className="app-page app-puzzle-view">
+    <div className="app-page app-page--wide app-puzzle-view">
       <div className="app-puzzle-view-head">
         <button type="button" className="app-back" onClick={onClose}>
           <Icon name="chevronLeft" size={18} strokeWidth={2.4} />
           {t('app.puzzles.back')}
         </button>
-        <div className="app-puzzle-view-title">
-          <span className="app-eyebrow">{tx(course.name)}</span>
-          <h1 className="app-h2">{tx(puzzle.theme)}</h1>
-        </div>
-        <span className="app-chip">{t('app.puzzles.rating', { n: puzzle.rating })}</span>
+        <span className="app-tx2">
+          {t('app.puzzles.position', { n: ordered.findIndex((p) => p.id === puzzle.id) + 1, total: ordered.length, course: tx(course.name) })}
+        </span>
       </div>
+      {/* El solver pinta el título, la dificultad y las pistas, y registra el intento. */}
       <Suspense fallback={<Loading />}>
         <PuzzleSolver
           key={puzzle.id}
@@ -50,6 +51,7 @@ function PuzzleView({ course, puzzle, onClose }: { course: Course; puzzle: Puzzl
 function PuzzleList({ filter, setFilter }: { filter: Filter; setFilter(f: Filter): void }) {
   const t = useT();
   const tx = useTx();
+  const plain = usePlainText();
   const plural = usePlural();
   const f = useFormat();
   const { state } = useProgress();
@@ -59,7 +61,8 @@ function PuzzleList({ filter, setFilter }: { filter: Filter; setFilter(f: Filter
     () =>
       courses
         .map((course) => {
-          const all = course.puzzles;
+          // De menos a más difícil.
+          const all = course.puzzles.slice().sort((a, b) => a.rating - b.rating);
           const solved = all.filter((p) => state.puzzles[p.id]?.solved).length;
           const shown = all.filter((p) => {
             const isSolved = !!state.puzzles[p.id]?.solved;
@@ -139,7 +142,7 @@ function PuzzleList({ filter, setFilter }: { filter: Filter; setFilter(f: Filter
                         <Icon name={isSolved ? 'check' : 'puzzle'} size={20} strokeWidth={isSolved ? 3 : 2} />
                       </span>
                       <span className="app-puzzle-text">
-                        <span className="app-puzzle-theme">{tx(p.theme)}</span>
+                        <span className="app-puzzle-theme">{plain(tx(p.theme))}</span>
                         <span className="app-puzzle-meta">
                           {t('app.puzzles.rating', { n: p.rating })} · {rec ? plural('app.puzzles.attempts', rec.attempts) : t('app.puzzles.new')}
                         </span>

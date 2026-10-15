@@ -1,5 +1,5 @@
-// Utilidades de la aplicación: título del documento, formatos según el idioma, consultas de
-// medios, medidas de elementos y el curso elegido (que se recuerda en el navegador).
+// Utilidades de la aplicación: título del documento, formatos según el idioma, medidas de
+// elementos y el curso elegido (que se recuerda en el navegador).
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState, useSyncExternalStore, type RefObject } from 'react';
 import { courses, type Course } from '@chessblizzard/shared';
 import { useLocale, useT } from '../i18n';
@@ -32,22 +32,6 @@ export function useFormat() {
 export function usePlural() {
   const t = useT();
   return useCallback((key: string, n: number, vars?: Record<string, string | number>) => t(`${key}.${n === 1 ? 'one' : 'other'}`, { n, ...vars }), [t]);
-}
-
-export function useMediaQuery(query: string): boolean {
-  const subscribe = useCallback(
-    (cb: () => void) => {
-      const mq = matchMedia(query);
-      mq.addEventListener('change', cb);
-      return () => mq.removeEventListener('change', cb);
-    },
-    [query],
-  );
-  return useSyncExternalStore(subscribe, () => matchMedia(query).matches, () => false);
-}
-
-export function useReducedMotion(): boolean {
-  return useMediaQuery('(prefers-reduced-motion: reduce)');
 }
 
 /** Ancho del contenido de un elemento, actualizado al cambiar de tamaño. */
