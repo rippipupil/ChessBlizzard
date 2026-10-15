@@ -47,6 +47,14 @@ describe('localizeMoveText', () => {
     expect(localizeMoveText('10.O-O-O f5', 'es')).toBe('10.0-0-0 f5');
   });
 
+  it('jugadas negras con puntos suspensivos y sin número', () => {
+    expect(localizeMoveText('...Nd4', 'es')).toBe('...Cd4');
+    expect(localizeMoveText('...O-O', 'es')).toBe('...0-0');
+    expect(localizeMoveText('...Qxb2 y ...Bxc3', 'es')).toBe('...Dxb2 y ...Axc3');
+    expect(localizeMoveText('...e5', 'es')).toBe('...e5');
+    expect(localizeMoveText('...Nd4', 'en')).toBe('...Nd4');
+  });
+
   it('jugadas sueltas sin número, con jaques y anotaciones', () => {
     expect(localizeMoveText('dxe5 dxe5 Qxd8+', 'es')).toBe('dxe5 dxe5 Dxd8+');
     expect(localizeMoveText('9.Nxe5?', 'es')).toBe('9.Cxe5?');
@@ -97,6 +105,16 @@ describe('parseRichText', () => {
       { kind: 'text', value: ', ' },
       { kind: 'move', value: '9...Nxe4!' },
       { kind: 'text', value: ' wins it back.' },
+    ]);
+  });
+
+  it('traduce las jugadas negras escritas como [...Nd7]', () => {
+    expect(parseRichText('Luego [...Nd7] y [...f5].', 'es')).toEqual([
+      { kind: 'text', value: 'Luego ' },
+      { kind: 'move', value: '...Cd7' },
+      { kind: 'text', value: ' y ' },
+      { kind: 'move', value: '...f5' },
+      { kind: 'text', value: '.' },
     ]);
   });
 

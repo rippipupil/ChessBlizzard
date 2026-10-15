@@ -47,10 +47,7 @@ export function Ghost({
       {neon ? (
         <path d={NEON_BODY} fill="var(--ghost-body)" stroke="var(--accent)" strokeWidth={5} />
       ) : (
-        <>
-          <path d="M6 58 Q-6 66 8 74" fill="none" stroke="var(--ghost-body)" strokeWidth={2} opacity={0.4} />
-          <path d={BLIZZARD_BODY} fill="var(--ghost-body)" opacity={0.95} />
-        </>
+        <path d={BLIZZARD_BODY} fill="var(--ghost-body)" opacity={0.95} />
       )}
       {neon ? (
         mood === 'sad' ? (

@@ -55,9 +55,14 @@ async function auditLine(engine: Engine, course: Course, line: LineDef, issues: 
   }
 
   const last = plies[plies.length - 1];
-  const [final] = await engine.analyse(last.fenAfter, { depth: DEPTH });
-  const sideToMove = new Chess(last.fenAfter).turn();
-  const forStudent = sideToMove === course.side ? final.cp : -final.cp;
+  const end = new Chess(last.fenAfter);
+  const sideToMove = end.turn();
+  // En una posición de mate o ahogado el motor no devuelve variante: se evalúa a mano.
+  let finalCp: number;
+  if (end.isCheckmate()) finalCp = -100000;
+  else if (end.isDraw() || end.isStalemate()) finalCp = 0;
+  else finalCp = (await engine.analyse(last.fenAfter, { depth: DEPTH }))[0]?.cp ?? 0;
+  const forStudent = sideToMove === course.side ? finalCp : -finalCp;
   report.push(`  final: ${fmt(forStudent)} para el alumno`);
   if (isWarning) {
     if (forStudent > -80) issues.push({ line: line.id, where: 'final', message: `el error no se castiga lo suficiente (${fmt(forStudent)})` });

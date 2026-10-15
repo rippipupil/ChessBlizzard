@@ -186,6 +186,7 @@ export function LinesStage({ course, stage, onExit }: { course: Course; stage: L
           line={line}
           newFrom={newFrom[studyIdx] ?? 0}
           header={header}
+          intro={studyIdx === 0 ? tx(stage.intro) : undefined}
           onFinished={() => setStudied((s) => new Set(s).add(line.id))}
           onProgress={(cursor, totalPlies) => setPos({ cursor, total: totalPlies })}
           endActions={endActions}

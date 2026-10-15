@@ -25,9 +25,11 @@ export interface StudyLineProps {
   onProgress?: (cursor: number, total: number) => void;
   /** Acciones del final de la línea (siguiente línea, empezar práctica...). */
   endActions?: ReactNode;
+  /** Presentación de la etapa (texto del contenido, con jugadas entre corchetes). */
+  intro?: string;
 }
 
-export function StudyLine({ course, line, newFrom, header, onFinished, onProgress, endActions }: StudyLineProps) {
+export function StudyLine({ course, line, newFrom, header, onFinished, onProgress, endActions, intro }: StudyLineProps) {
   const t = useT();
   const tx = useTx();
   const notation = useNotation();
@@ -110,7 +112,10 @@ export function StudyLine({ course, line, newFrom, header, onFinished, onProgres
   );
 
   const sideName = (c: 'w' | 'b') => t(c === 'w' ? 'lesson.white' : 'lesson.black');
-  const rivalName = sideName(user === 'w' ? 'b' : 'w');
+  const rival = user === 'w' ? 'b' : 'w';
+  /** "Las blancas" (al empezar una frase) y "las blancas" (en medio). */
+  const rivalThe = t(rival === 'w' ? 'lesson.theWhite' : 'lesson.theBlack');
+  const rivalLower = t(rival === 'w' ? 'lesson.whiteLower' : 'lesson.blackLower');
   const book = firstBook(course);
 
   const onMove = (from: string, to: string, promotion?: string) => {
@@ -150,6 +155,11 @@ export function StudyLine({ course, line, newFrom, header, onFinished, onProgres
   } else if (!focus) {
     comment = (
       <Comment mood="happy" title={tx(line.name)}>
+        {intro && (
+          <p className="cb-text">
+            <RichText text={intro} />
+          </p>
+        )}
         <p className="cb-text">{t('lesson.study.intro')}</p>
         <p className="cb-text cb-text-2">{t('lesson.study.introKeys')}</p>
       </Comment>
@@ -160,7 +170,7 @@ export function StudyLine({ course, line, newFrom, header, onFinished, onProgres
         {lastPly && (
           <div className="cb-context">
             <span className="cb-context-label">
-              {t('lesson.study.theyPlayed', { side: rivalName, move: moveLabel(lastPly, notation) })}
+              {t('lesson.study.theyPlayed', { side: rivalThe, move: moveLabel(lastPly, notation) })}
             </span>
             {lastPly.note?.text && (
               <p className="cb-text cb-text-2">
@@ -181,12 +191,12 @@ export function StudyLine({ course, line, newFrom, header, onFinished, onProgres
   } else if (lastPly) {
     const mine = lastPly.color === user;
     comment = (
-      <Comment mood={mine ? 'happy' : 'neutral'} title={`${moveLabel(lastPly, notation)} · ${t(mine ? 'lesson.study.byYou' : 'lesson.study.byRival', { side: rivalName })}`}>
+      <Comment mood={mine ? 'happy' : 'neutral'} title={`${moveLabel(lastPly, notation)} · ${t(mine ? 'lesson.study.byYou' : 'lesson.study.byRival', { side: rivalLower })}`}>
         <p className="cb-text">
           {lastPly.note?.text ? (
             <RichText text={tx(lastPly.note.text)} />
           ) : (
-            t(mine ? 'lesson.study.noNoteUser' : 'lesson.study.noNoteRival', { side: rivalName, move: moveLabel(lastPly, notation) })
+            t(mine ? 'lesson.study.noNoteUser' : 'lesson.study.noNoteRival', { side: rivalThe, move: moveLabel(lastPly, notation) })
           )}
         </p>
         {chips}
@@ -251,7 +261,7 @@ export function StudyLine({ course, line, newFrom, header, onFinished, onProgres
           </Section>
         )}
         {alternatives.length > 1 && opponentPly && (
-          <Section label={t('lesson.alts.title', { side: rivalName, move: moveLabel(opponentPly, notation) })}>
+          <Section label={t('lesson.alts.title', { side: rivalLower, move: moveLabel(opponentPly, notation) })}>
             <ul className="cb-alts">
               {alternatives.map((a) => (
                 <li key={a.san} className={`cb-alt${a.status === 'here' ? ' cb-alt-here' : ''}`}>

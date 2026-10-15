@@ -13,7 +13,7 @@ import { BoardArea } from './BoardArea';
 import { moveSound, useSound } from './hooks';
 import { campOf, moveLabel, stageLines } from './lessonData';
 import { Feedback, LessonShell, PanelHeader, Section } from './Shell';
-import { Button, Icon, MoveChip, MoveList } from './ui';
+import { Button, Icon, MoveChip, MoveList, RichText } from './ui';
 
 export interface SparringLevel {
   id: number;
@@ -257,7 +257,9 @@ export function SparringStage({ course, stage, onExit }: { course: Course; stage
         <BoardArea board={{ ...board, movable: null }} players={players} onFlip={() => setFlipped((f) => !f)} />
         <aside className="cb-panel" aria-label={t('lesson.panel.sparring')}>
           <PanelHeader kicker={kicker} title={tx(stage.title)}>
-            <p className="cb-panel-sub">{tx(stage.intro)}</p>
+            <p className="cb-panel-sub">
+              <RichText text={tx(stage.intro)} />
+            </p>
           </PanelHeader>
           <div className="cb-section">
             <h2 className="cb-label" id="cb-level-label">

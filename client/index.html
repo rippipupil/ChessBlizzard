@@ -10,9 +10,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script>
+      // Aplica el tema, el modo y el idioma guardados antes de pintar, sin destellos.
+      (function () {
+        try {
+          var s = JSON.parse(localStorage.getItem('cb.settings.v1') || '{}');
+          var d = document.documentElement;
+          if (s.theme === 'blizzard' || s.theme === 'neon') d.setAttribute('data-theme', s.theme);
+          var m = s.colorMode;
+          if (m === 'system') m = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          if (m === 'dark' || m === 'light') d.setAttribute('data-mode', m);
+          if (s.locale === 'es' || s.locale === 'en') d.lang = s.locale;
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>ChessBlizzard necesita JavaScript. · ChessBlizzard needs JavaScript.</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

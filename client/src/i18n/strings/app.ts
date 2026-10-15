@@ -220,7 +220,7 @@ export const appStrings: Dict = {
   'app.profile.sparringNone': { es: 'Sin partidas', en: 'No games yet' },
   'app.profile.games.one': { es: '{n} partida', en: '{n} game' },
   'app.profile.games.other': { es: '{n} partidas', en: '{n} games' },
-  'app.profile.wdl': { es: '{w} ganadas, {d} tablas, {l} perdidas', en: '{w} won, {d} drawn, {l} lost' },
+  'app.profile.wdl': { es: 'ganadas {w} · tablas {d} · perdidas {l}', en: 'won {w} · drawn {d} · lost {l}' },
   'app.profile.openCourse': { es: 'Ver la montaña', en: 'View the mountain' },
 
   // --- Medallas (ids de badges() en shared/src/progress.ts) ---

@@ -189,7 +189,8 @@ export function PuzzleSolver({ puzzle, course, onDone, mode = 'normal', recordAt
   if (phase === 'end' && lastMove && !failed) tones[lastMove[1]] = 'ok';
 
   const studentName = t(student === 'w' ? 'lesson.white' : 'lesson.black');
-  const rivalName = t(student === 'w' ? 'lesson.black' : 'lesson.white');
+  const studentLower = t(student === 'w' ? 'lesson.whiteLower' : 'lesson.blackLower');
+  const rivalLower = t(student === 'w' ? 'lesson.blackLower' : 'lesson.whiteLower');
   const movable = phase === 'user' && !wrong ? { color: student, dests: legalDests(fenNow) } : null;
   const played = setup.solution.slice(0, cursor);
 
@@ -198,11 +199,11 @@ export function PuzzleSolver({ puzzle, course, onDone, mode = 'normal', recordAt
   if (setup.error) status = <p className="cb-text">{t('lesson.puzzle.broken')}</p>;
   else if (phase === 'end') status = <p className="cb-prompt">{solvedNow ? t('lesson.puzzle.solvedText') : t('lesson.puzzle.failedText')}</p>;
   else if (phase === 'reveal') status = <p className="cb-prompt">{t('lesson.puzzle.revealing')}</p>;
-  else if (phase === 'auto' || phase === 'intro') status = <p className="cb-prompt cb-thinking">{t('lesson.puzzle.theyMove', { side: rivalName })}</p>;
+  else if (phase === 'auto' || phase === 'intro') status = <p className="cb-prompt cb-thinking">{t('lesson.puzzle.theyMove', { side: rivalLower })}</p>;
   else
     status = (
       <>
-        <p className="cb-prompt">{cursor === 0 ? t('lesson.puzzle.find', { side: studentName }) : t('lesson.puzzle.keepGoing')}</p>
+        <p className="cb-prompt">{cursor === 0 ? t('lesson.puzzle.find', { side: studentLower }) : t('lesson.puzzle.keepGoing')}</p>
         {failed && !exam && <p className="cb-text cb-text-err">{t('lesson.puzzle.tryAgain')}</p>}
       </>
     );

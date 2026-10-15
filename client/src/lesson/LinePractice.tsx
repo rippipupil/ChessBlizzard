@@ -247,7 +247,7 @@ export function LinePractice({ course, line, mode, startAt = 0, header, onComple
     statusLabel = t('lesson.practice.wellDone');
     statusBody = <p className="cb-prompt">{t('lesson.practice.readAndContinue')}</p>;
   } else if (phase === 'auto' || !nextPly) {
-    statusLabel = t('lesson.practice.theirTurn', { side: sideName(rival) });
+    statusLabel = t('lesson.practice.theirTurn', { side: t(rival === 'w' ? 'lesson.whiteLower' : 'lesson.blackLower') });
     statusBody = (
       <p className="cb-prompt cb-thinking">
         {okPly && cursor === (okAt ?? -1) + 1 && (

@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Ghost, type GhostMood } from '../theme/Ghost';
 import { useT } from '../i18n';
+import { usePlural } from './hooks';
 import { BoltIcon, Button, FlameIcon, Icon, IconButton, type IconName } from './ui';
 import './lesson.css';
 
@@ -45,6 +46,7 @@ export function LessonShell({
   wide?: boolean;
 }) {
   const t = useT();
+  const plural = usePlural();
   const pct = Math.round(Math.max(0, Math.min(1, progress.value)) * 100);
   const [pop, setPop] = useState(false);
   const prevXp = useRef(xp ?? 0);
@@ -91,7 +93,7 @@ export function LessonShell({
           {streak !== undefined ? (
             <div className="cb-pill" aria-label={t('lesson.streakLabel', { n: streak })}>
               <FlameIcon />
-              {t('lesson.streakDays', { n: streak })}
+              {plural('lesson.streakDays', streak)}
             </div>
           ) : (
             <div className={`cb-pill cb-xp${pop ? ' cb-xp-pop' : ''}`} aria-label={t('lesson.xpLabel', { n: xp ?? 0 })} aria-live="polite">

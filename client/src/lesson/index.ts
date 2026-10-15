@@ -1,22 +1,9 @@
-// Provisional: el equipo del núcleo de ajedrez sustituye estos componentes por los reales.
-// Mantén estas firmas: las usa el equipo de la aplicación desde las rutas.
-import { createElement } from 'react';
-import type { Course, Puzzle, Stage } from '@chessblizzard/shared';
-
-const Pending = (name: string) => createElement('p', { style: { padding: 32 } }, `${name}: en construcción`);
-
-export function StagePlayer(_props: { course: Course; stage: Stage; onExit: () => void }) {
-  return Pending('StagePlayer');
-}
-
-export function ReviewSession(_props: { onExit: () => void }) {
-  return Pending('ReviewSession');
-}
-
-export function PuzzleSolver(_props: { puzzle: Puzzle; course: Course; onDone: (solved: boolean) => void }) {
-  return Pending('PuzzleSolver');
-}
-
-export function AnalysisBoard() {
-  return Pending('AnalysisBoard');
-}
+// Reproductores de etapas y pantallas de ajedrez. Estas firmas las usa la app desde sus rutas:
+//   <StagePlayer course stage onExit />, <ReviewSession onExit />,
+//   <PuzzleSolver puzzle course onDone />, <AnalysisBoard />
+export { StagePlayer } from './StagePlayer';
+export { ReviewSession } from './ReviewSession';
+export { PuzzleSolver } from './PuzzleSolver';
+export type { PuzzleSolverProps } from './PuzzleSolver';
+export { AnalysisBoard } from './AnalysisBoard';
+export { SPARRING_LEVELS } from './SparringStage';
