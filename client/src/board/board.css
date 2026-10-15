@@ -1,0 +1,348 @@
+/* Tablero. Todos los colores salen de las variables de styles/tokens.css. */
+
+.cb-board {
+  --cb-move-ms: 180ms;
+  position: relative;
+  width: 100%;
+  max-width: var(--cb-board-max, 640px);
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-s);
+  box-shadow: var(--board-frame);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  container-type: inline-size;
+  outline: none;
+  /* En una fila flex, el alto sale del ancho (aspect-ratio), no del contenedor. */
+  align-self: flex-start;
+  min-width: 0;
+}
+
+.cb-board.cb-movable {
+  touch-action: none;
+}
+
+.cb-board:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- Casillas ---------- */
+
+.cb-squares {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-rows: repeat(8, minmax(0, 1fr));
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.cb-row {
+  display: contents;
+}
+
+.cb-sq {
+  position: relative;
+  background-color: var(--sq-dark);
+  background-image: var(--cb-hl-check, none), var(--cb-hl-tone, none), var(--cb-hl-base, none);
+}
+
+.cb-sq-l {
+  background-color: var(--sq-light);
+}
+
+.cb-last {
+  --cb-hl-base: linear-gradient(var(--hl-last), var(--hl-last));
+}
+
+[data-theme='neon'] .cb-last {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--ok) 60%, transparent);
+}
+
+.cb-sel {
+  --cb-hl-base: linear-gradient(var(--hl-select), var(--hl-select));
+}
+
+.cb-check {
+  --cb-hl-check: var(--hl-check);
+}
+
+.cb-tone-ok {
+  --cb-hl-tone: linear-gradient(var(--hl-ok), var(--hl-ok));
+}
+
+.cb-tone-err {
+  --cb-hl-tone: linear-gradient(var(--hl-err), var(--hl-err));
+}
+
+.cb-tone-hint::before,
+.cb-hover::before,
+.cb-cursor::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cb-tone-hint::before {
+  box-shadow: inset 0 0 0 4px var(--arrow-hint);
+  animation: cb-pulse 1.4s ease-in-out infinite;
+}
+
+.cb-hover::before {
+  background: var(--hl-select);
+  opacity: 0.7;
+}
+
+.cb-cursor::before {
+  inset: 3px;
+  border-radius: 4px;
+  box-shadow: 0 0 0 3px var(--accent);
+}
+
+/* Destinos al seleccionar: punto en casilla vacía, anillo en captura. */
+.cb-dest::after,
+.cb-cap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cb-dest::after {
+  background: radial-gradient(circle, var(--dot-move) 0 19%, transparent calc(19% + 1px));
+}
+
+.cb-cap::after {
+  background: radial-gradient(circle, transparent 0 57%, var(--dot-move) calc(57% + 1px) 67%, transparent calc(67% + 1px));
+}
+
+.cb-movable .cb-own {
+  cursor: grab;
+}
+
+.cb-movable .cb-dest,
+.cb-movable .cb-cap {
+  cursor: pointer;
+}
+
+/* ---------- Coordenadas ---------- */
+
+.cb-coord {
+  position: absolute;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(8px, 2.1cqw, 13px);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.cb-coord-rank {
+  top: 5%;
+  left: 7%;
+}
+
+.cb-coord-file {
+  bottom: 5%;
+  right: 7%;
+}
+
+.cb-sq-l .cb-coord {
+  color: var(--sq-coord-on-light);
+}
+
+.cb-sq-d .cb-coord {
+  color: var(--sq-coord-on-dark);
+}
+
+/* ---------- Piezas ---------- */
+
+.cb-pieces {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cb-piece {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 12.5%;
+  height: 12.5%;
+  overflow: visible;
+  stroke-width: 3.2px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  transition: transform var(--cb-move-ms) var(--ease);
+  z-index: 1;
+}
+
+.cb-moved {
+  z-index: 2;
+}
+
+.cb-instant .cb-piece,
+.cb-piece.cb-noanim {
+  transition: none;
+}
+
+.cb-dragging {
+  opacity: 0.35;
+}
+
+.cb-fade {
+  animation: cb-fade var(--cb-move-ms) ease forwards;
+}
+
+.cb-pc-w {
+  fill: var(--piece-w-fill);
+  stroke: var(--piece-w-stroke);
+  --ink: var(--piece-w-ink);
+  filter: var(--piece-w-filter);
+}
+
+.cb-pc-b {
+  fill: var(--piece-b-fill);
+  stroke: var(--piece-b-stroke);
+  --ink: var(--piece-b-ink);
+  filter: var(--piece-b-filter);
+}
+
+.cb-piece-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  stroke-width: 3.2px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* ---------- Flechas y marcas ---------- */
+
+.cb-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 3;
+}
+
+.cb-arrow {
+  color: var(--arrow-plan);
+  opacity: 0.85;
+}
+
+.cb-arrow polyline {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 18.5px;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+}
+
+.cb-arrow polygon {
+  fill: currentColor;
+  stroke: none;
+}
+
+.cb-arrow-rival {
+  color: var(--arrow-rival);
+  opacity: 0.75;
+}
+
+.cb-arrow-hint {
+  color: var(--arrow-hint);
+  opacity: 0.85;
+}
+
+.cb-arrow-best {
+  color: var(--arrow-best);
+  opacity: 0.9;
+}
+
+.cb-mark {
+  fill: none;
+  stroke: var(--arrow-hint);
+  stroke-width: 6px;
+  opacity: 0.85;
+}
+
+/* ---------- Promoción ---------- */
+
+.cb-promo {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--bg) 60%, transparent);
+}
+
+.cb-promo-btn {
+  position: absolute;
+  width: 12.5%;
+  height: 12.5%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: var(--s2);
+  box-shadow: inset 0 0 0 2px var(--bd);
+  transition: background 120ms ease;
+}
+
+.cb-promo-btn:hover,
+.cb-promo-btn:focus-visible {
+  background: var(--s3);
+  box-shadow: inset 0 0 0 3px var(--accent);
+  outline: none;
+}
+
+/* ---------- Pieza arrastrada (va en <body>) ---------- */
+
+.cb-drag {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.cb-drag-touch .cb-piece-svg {
+  transform: scale(1.35) translateY(-22%);
+}
+
+@keyframes cb-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes cb-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cb-piece {
+    transition: none;
+  }
+  .cb-fade {
+    animation: none;
+    opacity: 0;
+  }
+  .cb-tone-hint::before {
+    animation: none;
+  }
+}

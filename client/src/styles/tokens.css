@@ -92,6 +92,26 @@
   --ghost-body: #e9edf0;
   --ghost-eye: #0b0c0e;
   --ghost-glint: #9fe3ea;
+
+  /* App: controles, avisos y fondos (añadidos por el equipo de la aplicación) */
+  --warn-text: #f2c14e;
+  --inset: #0f1012;
+  --seg-on: #24272c;
+  --nav-bg: rgba(15, 16, 18, 0.96);
+  --switch-off: #2c3036;
+  --switch-knob-off: #a9afb7;
+  --bd-strong: #2c3036;
+  --glow: 0 0 0 transparent;
+  --done-glow: 0 0 0 transparent;
+  --flag: #9fe3ea;
+  --deco-ridge: #0f1012;
+  --deco-wall: #0d0a14;
+  --deco-brick: #16121f;
+  --deco-rain: rgba(79, 240, 255, 0.1);
+  --deco-sign-1: #ff4fd8;
+  --deco-sign-2: #ffe45c;
+  --deco-sign-3: #4ff0ff;
+  --scrim: rgba(5, 6, 8, 0.6);
 }
 
 /* ---------- Black Blizzard · claro ---------- */
@@ -147,6 +167,19 @@
   --ghost-body: #2a2d32;
   --ghost-eye: #f2f4f6;
   --ghost-glint: #86d9e2;
+
+  --warn-text: #8f6200;
+  --inset: #f1f3f5;
+  --seg-on: #ffffff;
+  --nav-bg: rgba(255, 255, 255, 0.96);
+  --switch-off: #c9ced4;
+  --switch-knob-off: #ffffff;
+  --bd-strong: #bfc5cc;
+  --glow: 0 0 0 transparent;
+  --done-glow: 0 0 0 transparent;
+  --flag: #1d7480;
+  --deco-ridge: #dfe3e7;
+  --scrim: rgba(18, 20, 23, 0.35);
 }
 
 /* ---------- Neón · oscuro ---------- */
@@ -218,6 +251,25 @@
   --ghost-body: #1a0f22;
   --ghost-eye: #4ff0ff;
   --ghost-glint: #ffe45c;
+
+  --warn-text: #ffe45c;
+  --inset: #0b0911;
+  --seg-on: #221c31;
+  --nav-bg: rgba(11, 9, 17, 0.96);
+  --switch-off: #2c2440;
+  --switch-knob-off: #b3aac6;
+  --bd-strong: #3a2f52;
+  --glow: 0 0 22px rgba(255, 79, 216, 0.45);
+  --done-glow: 0 0 8px rgba(79, 240, 255, 0.6);
+  --flag: #ff4fd8;
+  --deco-ridge: #0d0a14;
+  --deco-wall: #0d0a14;
+  --deco-brick: #16121f;
+  --deco-rain: rgba(79, 240, 255, 0.1);
+  --deco-sign-1: #ff4fd8;
+  --deco-sign-2: #ffe45c;
+  --deco-sign-3: #4ff0ff;
+  --scrim: rgba(4, 3, 8, 0.65);
 }
 
 /* ---------- Neón · claro ---------- */
@@ -286,4 +338,23 @@
   --ghost-body: #ffffff;
   --ghost-eye: #087f8c;
   --ghost-glint: #c99a00;
+
+  --warn-text: #7f6100;
+  --inset: #efe9f8;
+  --seg-on: #ffffff;
+  --nav-bg: rgba(255, 255, 255, 0.96);
+  --switch-off: #d5c9ea;
+  --switch-knob-off: #ffffff;
+  --bd-strong: #c9bce0;
+  --glow: 0 0 14px rgba(255, 79, 216, 0.25);
+  --done-glow: 0 0 6px rgba(8, 127, 140, 0.35);
+  --flag: #d4199f;
+  --deco-ridge: #e6def3;
+  --deco-wall: #ebe4f6;
+  --deco-brick: #ddd3ee;
+  --deco-rain: rgba(176, 18, 140, 0.12);
+  --deco-sign-1: #d4199f;
+  --deco-sign-2: #c99a00;
+  --deco-sign-3: #087f8c;
+  --scrim: rgba(26, 19, 38, 0.35);
 }

@@ -18,7 +18,11 @@ const MIN_EASE = 1.3;
 const MAX_INTERVAL = 180;
 
 export function isDay(value: string): boolean {
-  return /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(`${value}T00:00:00Z`));
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const time = Date.parse(`${value}T00:00:00Z`);
+  // Date.parse acepta días que no existen (2026-02-30 pasa a ser el 2 de marzo): se
+  // comprueba que la fecha vuelve igual.
+  return !Number.isNaN(time) && new Date(time).toISOString().slice(0, 10) === value;
 }
 
 export function addDays(day: string, days: number): string {
@@ -63,7 +67,8 @@ export function review(card: SrsCard | undefined, grade: Grade, today: string): 
       else interval = Math.round(interval * ease);
       if (grade === 'easy') {
         ease += 0.15;
-        interval = Math.round(interval * 1.3) || 1;
+        // Siempre más que "good": con intervalos cortos el ×1,3 se perdía al redondear (1 -> 1).
+        interval = Math.max(interval + 1, Math.round(interval * 1.3));
       }
       break;
   }

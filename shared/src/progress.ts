@@ -1,7 +1,7 @@
 // Progreso del alumno: un reductor puro que usan igual el navegador (modo invitado)
 // y el servidor (cuentas), para que las reglas de XP y desbloqueo sean las mismas.
 
-import { addDays, isDue, review, type Grade, type SrsCard } from './srs';
+import { addDays, daysBetween, isDue, review, type Grade, type SrsCard } from './srs';
 import type { Course, Stage } from './types';
 
 export interface StageRecord {
@@ -138,8 +138,10 @@ export function applyEvent(state: ProgressState, event: ProgressEvent): { state:
 
   if (xp > 0) {
     s.xp += xp;
-    if (s.daily.day !== event.day) s.daily = { day: event.day, xp: 0 };
-    s.daily.xp += xp;
+    // El objetivo diario es el del día más reciente: un evento atrasado (sincronización
+    // tardía) suma XP, pero no reinicia el contador de hoy.
+    if (!s.daily.day || event.day > s.daily.day) s.daily = { day: event.day, xp: 0 };
+    if (s.daily.day === event.day) s.daily.xp += xp;
     touchStreak(s, event.day);
   }
   return { state: s, xp };
@@ -169,22 +171,45 @@ function touchStreak(s: ProgressState, day: string) {
 export function currentStreak(s: ProgressState, today: string): number {
   const { lastDay, count } = s.streak;
   if (!lastDay) return 0;
-  return lastDay === today || addDays(lastDay, 1) === today ? count : 0;
+  // lastDay > today: actividad apuntada con la fecha de otra zona horaria; la racha sigue viva.
+  return lastDay >= today || addDays(lastDay, 1) === today ? count : 0;
 }
 
 export function dailyXp(s: ProgressState, today: string): number {
   return s.daily.day === today ? s.daily.xp : 0;
 }
 
-/** Une dos progresos (por ejemplo, el de invitado con el de la cuenta). */
+/**
+ * Une dos rachas. Cada racha es una serie de días seguidos que acaba en `lastDay`: si las
+ * dos series se tocan o se solapan (p. ej. la cuenta hasta ayer y el invitado hoy), la
+ * racha unida va desde el primer día de las dos hasta el último.
+ */
+function mergeStreaks(a: ProgressState['streak'], b: ProgressState['streak']): ProgressState['streak'] {
+  const [newer, older] = (a.lastDay ?? '') >= (b.lastDay ?? '') ? [a, b] : [b, a];
+  let count = newer.count;
+  if (newer.lastDay && older.lastDay && newer.count > 0 && older.count > 0) {
+    const newerStart = addDays(newer.lastDay, 1 - newer.count);
+    if (older.lastDay >= addDays(newerStart, -1)) {
+      const olderStart = addDays(older.lastDay, 1 - older.count);
+      count = daysBetween(olderStart < newerStart ? olderStart : newerStart, newer.lastDay) + 1;
+    }
+  }
+  return { count, lastDay: newer.lastDay, best: Math.max(a.best, b.best, count) };
+}
+
+/**
+ * Une dos progresos (por ejemplo, el de invitado con el de la cuenta). Es idempotente:
+ * importar dos veces lo mismo no cambia nada. En un empate exacto (misma línea repasada el
+ * mismo día con las mismas repeticiones, o el mismo número de partidas de sparring) se
+ * queda el dato de `a`.
+ */
 export function mergeProgress(a: ProgressState, b: ProgressState): ProgressState {
   const out = emptyProgress();
   out.xp = Math.max(a.xp, b.xp);
-  const sa = a.streak;
-  const sb = b.streak;
-  const newer = (sa.lastDay ?? '') >= (sb.lastDay ?? '') ? sa : sb;
-  out.streak = { count: newer.count, lastDay: newer.lastDay, best: Math.max(sa.best, sb.best) };
-  out.daily = (a.daily.day ?? '') >= (b.daily.day ?? '') ? { ...a.daily } : { ...b.daily };
+  out.streak = mergeStreaks(a.streak, b.streak);
+  const da = a.daily.day ?? '';
+  const db = b.daily.day ?? '';
+  out.daily = da > db ? { ...a.daily } : db > da ? { ...b.daily } : { day: a.daily.day, xp: Math.max(a.daily.xp, b.daily.xp) };
 
   for (const src of [a, b]) {
     for (const [k, v] of Object.entries(src.stages)) {

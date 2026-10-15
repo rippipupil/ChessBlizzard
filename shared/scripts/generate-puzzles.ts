@@ -12,11 +12,12 @@
 //  1. Recorre las posiciones de las líneas (playLine) en las que mueve el rival. Las líneas
 //     `practice: false` (errores del propio alumno) se saltan salvo con --include-warnings.
 //  2. En cada posición prueba las jugadas legales razonables del rival. Se descartan los
-//     disparates: jugadas cuya pieza se pierde en la casilla de destino (intercambio
-//     estático) sin compensación. Un filtro rápido (--quick-depth) elige las sospechosas y
-//     la profundidad de cribado (--depth) confirma el error: pierde al menos --min-loss cp
-//     frente a la mejor jugada, y antes del error el alumno no estaba ya ganando
-//     (--max-before).
+//     disparates (pierden 2 peones o más en el balance estático: dejan una pieza colgada,
+//     no recapturan, dan una pieza por un peón) y las jugadas poco naturales (paseos del
+//     rey, maniobras raras que ni a profundidad 4 parecen buenas). Un filtro rápido
+//     (--quick-depth) elige las sospechosas y la profundidad de cribado (--depth) confirma
+//     el error: pierde al menos --min-loss cp frente a la mejor jugada, y antes del error
+//     el alumno no estaba ya ganando (--max-before).
 //  3. Tras el error le toca al alumno. La posición es candidata si su mejor jugada es clara
 //     (al menos --min-gap cp mejor que la segunda, o mate) y deja una ventaja decisiva
 //     (al menos --min-adv cp, o mate).
@@ -137,15 +138,6 @@ function see(chess: Chess, square: Square): number {
   return Math.max(0, gain);
 }
 
-/** Disparate: la pieza movida se pierde en su casilla de destino sin compensación (≥ 3 peones netos). */
-function isNonsense(chess: Chess, m: Move): boolean {
-  const won = m.captured ? VALUE[m.captured] : 0;
-  chess.move({ from: m.from, to: m.to, promotion: m.promotion });
-  const lost = see(chess, m.to as Square);
-  chess.undo();
-  return lost - won >= 300;
-}
-
 /** Material desde el punto de vista de `color` (sin contar reyes). */
 function material(chess: Chess, color: Color): number {
   let sum = 0;
@@ -153,6 +145,40 @@ function material(chess: Chess, color: Color): number {
     for (const sq of row) if (sq && sq.type !== 'k') sum += (sq.color === color ? 1 : -1) * VALUE[sq.type];
   }
   return sum;
+}
+
+/** Valor estático para el bando que mueve: material más la mejor captura simple (SEE). */
+function staticValue(chess: Chess): number {
+  let best = 0;
+  const targets = new Set(chess.moves({ verbose: true }).filter((m) => m.captured).map((m) => m.to));
+  for (const sq of targets) best = Math.max(best, see(chess, sq as Square));
+  return material(chess, chess.turn() as Color) + best;
+}
+
+/**
+ * Disparate: la jugada pierde al menos 2 peones en el balance estático, sin táctica de por
+ * medio: deja colgada la pieza movida u otra ya atacada, no recaptura o da una pieza por un
+ * peón. `before` es staticValue() de la posición antes de la jugada.
+ */
+function isNonsense(chess: Chess, m: Move, before: number): boolean {
+  chess.move({ from: m.from, to: m.to, promotion: m.promotion });
+  const after = staticValue(chess); // para el bando contrario
+  chess.undo();
+  return after + before >= 200;
+}
+
+/**
+ * Jugada natural: la que un jugador de club consideraría. Capturas, enroques, salidas de
+ * jaque, desarrollos de las piezas menores, jugadas de peón y cualquier jugada que parezca
+ * buena a poca profundidad (entre las 8 primeras). Quedan fuera paseos del rey, retiradas
+ * sin sentido y maniobras raras de torre o dama que ni a simple vista parecen buenas.
+ */
+function isNatural(m: Move, shallowRank: number, inCheck: boolean): boolean {
+  if (shallowRank <= 8 || inCheck) return true;
+  if (m.captured || m.flags.includes('k') || m.flags.includes('q')) return true;
+  const home = m.color === 'w' ? '1' : '8';
+  if ((m.piece === 'n' || m.piece === 'b') && m.from[1] === home && m.to[1] !== home) return true;
+  return m.piece === 'p';
 }
 
 /** Piezas rivales atacadas por la pieza de `square` que valen más que ella o están indefensas. */
@@ -356,24 +382,30 @@ async function generate(engine: Engine, course: Course) {
       continue;
     }
 
-    // Filtro rápido: todas las jugadas razonables a poca profundidad.
-    const legal = chess.moves({ verbose: true });
+    // 1) Fuera los disparates. 2) Vistazo a profundidad 4 para ordenar las jugadas como las
+    // vería un humano. 3) Solo las naturales pasan al filtro rápido (--quick-depth).
+    const before = staticValue(chess);
+    const inCheck = chess.inCheck();
     const quick: Array<{ move: Move; fen: string; cp: number; shallow: number }> = [];
-    for (const m of legal) {
-      if (isNonsense(chess, m)) continue;
+    for (const m of chess.moves({ verbose: true })) {
+      if (isNonsense(chess, m, before)) continue;
       chess.move({ from: m.from, to: m.to, promotion: m.promotion });
       const fen = chess.fen();
       const over = chess.isGameOver();
       chess.undo();
       if (over) continue;
       const [sh] = await engine.analyse(fen, { depth: SHALLOW_DEPTH, multipv: 1 });
-      const [q] = await engine.analyse(fen, { depth: QUICK_DEPTH, multipv: 1 });
-      if (q && sh) quick.push({ move: m, fen, cp: q.cp, shallow: sh.cp });
+      if (sh) quick.push({ move: m, fen, cp: NaN, shallow: sh.cp });
     }
     // Puesto de cada jugada para el rival (cp del alumno más bajo = mejor para el rival).
-    const ranked = [...quick].sort((a, b) => a.cp - b.cp);
     const rankedShallow = [...quick].sort((a, b) => a.shallow - b.shallow);
-    const suspects = quick.filter((q) => best.cp + q.cp >= MIN_LOSS * 0.6 && q.cp >= MIN_ADV * 0.6);
+    const natural = quick.filter((q) => isNatural(q.move, rankedShallow.indexOf(q) + 1, inCheck));
+    for (const q of natural) {
+      const [r] = await engine.analyse(q.fen, { depth: QUICK_DEPTH, multipv: 1 });
+      q.cp = r ? r.cp : NaN;
+    }
+    const ranked = natural.filter((q) => !Number.isNaN(q.cp)).sort((a, b) => a.cp - b.cp);
+    const suspects = ranked.filter((q) => best.cp + q.cp >= MIN_LOSS * 0.6 && q.cp >= MIN_ADV * 0.6);
     let found = 0;
 
     for (const s of suspects) {
@@ -412,6 +444,8 @@ async function generate(engine: Engine, course: Course) {
         tags,
         ratingGuess: rating,
       };
+      // Error tentador: a profundidad 4 todavía parece una jugada normal.
+      if (cand.shallowLoss < 100) cand.tags.push('tempting');
       if (CONFIRM_DEPTH > 0) {
         const deep = await engine.analyse(s.fen, { depth: CONFIRM_DEPTH, multipv: 2 });
         const deepBest = pvToSan(s.fen, deep[0].pv.slice(0, 1))[0];
@@ -430,7 +464,7 @@ async function generate(engine: Engine, course: Course) {
       );
     }
     const mins = ((Date.now() - t0) / 60000).toFixed(1);
-    console.log(`[${si + 1}/${spots.length}] ${where}: ${quick.length} jugadas, ${suspects.length} sospechosas, ${found} candidato(s) · ${mins} min`);
+    console.log(`[${si + 1}/${spots.length}] ${where}: ${quick.length} razonables, ${natural.length} naturales, ${suspects.length} sospechosas, ${found} candidato(s) · ${mins} min`);
     save(si + 1);
   }
   save(spots.length);

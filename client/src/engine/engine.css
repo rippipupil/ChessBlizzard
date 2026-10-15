@@ -1,0 +1,134 @@
+/* Barra de evaluación y líneas del motor. */
+
+.cb-evalbar {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: var(--radius-s);
+  background: var(--s3);
+  box-shadow: 0 0 0 1px var(--bd);
+}
+
+.cb-evalbar-v {
+  width: 24px;
+  align-self: stretch;
+  min-height: 120px;
+}
+
+.cb-evalbar-h {
+  height: 20px;
+  width: 100%;
+}
+
+.cb-evalbar-fill {
+  position: absolute;
+  background: var(--piece-w-fill);
+  transition: height 450ms var(--ease), width 450ms var(--ease);
+}
+
+.cb-evalbar-v .cb-evalbar-fill {
+  left: 0;
+  right: 0;
+}
+
+.cb-evalbar-v.cb-evalbar-wend .cb-evalbar-fill {
+  bottom: 0;
+}
+
+.cb-evalbar-v.cb-evalbar-wstart .cb-evalbar-fill {
+  top: 0;
+}
+
+.cb-evalbar-h .cb-evalbar-fill {
+  top: 0;
+  bottom: 0;
+}
+
+.cb-evalbar-h.cb-evalbar-wstart .cb-evalbar-fill {
+  left: 0;
+}
+
+.cb-evalbar-h.cb-evalbar-wend .cb-evalbar-fill {
+  right: 0;
+}
+
+/* Marca del centro (igualdad). */
+.cb-evalbar::after {
+  content: '';
+  position: absolute;
+  background: var(--accent);
+  opacity: 0.55;
+}
+
+.cb-evalbar-v::after {
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+}
+
+.cb-evalbar-h::after {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+}
+
+.cb-evalbar-label {
+  position: absolute;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cb-evalbar-v .cb-evalbar-label {
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.cb-evalbar-v .cb-evalbar-label-start {
+  top: 6px;
+}
+
+.cb-evalbar-v .cb-evalbar-label-end {
+  bottom: 6px;
+}
+
+.cb-evalbar-h .cb-evalbar-label {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.cb-evalbar-h .cb-evalbar-label-start {
+  left: 8px;
+}
+
+.cb-evalbar-h .cb-evalbar-label-end {
+  right: 8px;
+}
+
+.cb-on-white {
+  color: var(--bg);
+}
+
+.cb-on-black {
+  color: var(--tx);
+}
+
+.cb-evalbar-thinking .cb-evalbar-label {
+  opacity: 0.75;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cb-evalbar-fill {
+    transition: none;
+  }
+}

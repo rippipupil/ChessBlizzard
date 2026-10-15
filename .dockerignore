@@ -1,0 +1,26 @@
+# Se instala y se compila dentro de la imagen.
+**/node_modules
+**/dist
+client/public/stockfish
+
+# Nada de secretos ni de datos locales.
+.env
+.env.*
+!.env.example
+.pgdata
+
+# Ni historia de git, ni resultados de tests, ni ficheros del editor.
+.git
+.github
+**/*.log
+test-results
+playwright-report
+coverage
+.vscode
+.idea
+.DS_Store
+
+Dockerfile
+.dockerignore
+docker-compose.yml
+render.yaml

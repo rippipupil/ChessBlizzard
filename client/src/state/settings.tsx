@@ -60,6 +60,20 @@ export function SettingsProvider({ children, onChange }: { children: ReactNode; 
     }
   }, [settings]);
 
+  // Cambios hechos en otra pestaña.
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== STORAGE_KEY || !e.newValue) return;
+      try {
+        setSettings({ ...DEFAULT_SETTINGS, ...sanitizeSettings(JSON.parse(e.newValue)) });
+      } catch {
+        // Valor corrupto: se ignora.
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
   const update = useCallback(
     (patch: Partial<Settings>) => {
       setSettings((s) => ({ ...s, ...patch }));
