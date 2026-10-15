@@ -19,7 +19,7 @@ import { useAuth } from '../../state/auth';
 import { useProgress } from '../../state/progress';
 import { Ghost } from '../../theme/Ghost';
 import { AccountSection } from '../AccountSection';
-import { useDocumentTitle, useFormat, usePlural } from '../hooks';
+import { rememberCourse, useDocumentTitle, useFormat, usePlural } from '../hooks';
 import { Icon, type IconName } from '../icons';
 import { Bar, PageHeader } from '../ui';
 
@@ -88,17 +88,12 @@ function CourseCard({ course, state }: { course: Course; state: ProgressState })
           </dd>
         </div>
       </dl>
-      <Link to="/" className="app-link app-course-card-link" onClick={() => localStorageCourse(course.id)}>
+      <Link to="/" className="app-link app-course-card-link" onClick={() => rememberCourse(course.id)}>
         {t('app.profile.openCourse')}
         <Icon name="arrowRight" size={16} />
       </Link>
     </article>
   );
-}
-
-/** Al abrir un curso desde el perfil, la montaña muestra ese curso. */
-function localStorageCourse(id: string) {
-  import('../hooks').then((m) => m.rememberCourse(id));
 }
 
 export default function ProfilePage() {
@@ -217,7 +212,7 @@ export default function ProfilePage() {
         </div>
       </section>
 
-      <section aria-labelledby="app-account-title" className="app-profile-section">
+      <section aria-labelledby="app-account-heading" className="app-profile-section">
         <h2 className="app-h2" id="app-account-heading">
           {t('app.settings.tab.account')}
         </h2>
