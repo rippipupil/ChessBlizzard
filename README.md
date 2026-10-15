@@ -56,9 +56,13 @@ npm run typecheck
 Desarrollo (la web en http://localhost:5173 y la API en el puerto 3000):
 
 ```bash
-cp .env.example .env     # y rellena DATABASE_URL
-npm run dev
+cp .env.example .env     # el servidor lo carga solo
+docker compose up -d db  # PostgreSQL 16 local (o usa el tuyo y cambia DATABASE_URL)
+npm run dev              # servidor + Vite; las migraciones se aplican al arrancar
 ```
+
+Los tests del servidor no necesitan configuración: si no hay `TEST_DATABASE_URL`,
+arrancan un PostgreSQL desechable (`server/scripts/test-db.sh`, puerto 5433).
 
 Con Docker (web y base de datos juntas, en http://localhost:3000):
 
@@ -77,8 +81,16 @@ npm run audit -w shared -- --line kid-main --depth 18   # una línea
 ## Despliegue
 
 El repositorio incluye un `Dockerfile` y un `render.yaml` para desplegar en
-[Render](https://render.com) con un clic: un servicio web y una base de datos
-PostgreSQL. Variables de entorno en `.env.example`.
+[Render](https://render.com) con un clic (New › Blueprint): un servicio web y una
+base de datos PostgreSQL 16. Variables de entorno en `.env.example`.
+
+Ojo: el PostgreSQL gratuito de Render caduca a los 30 días; para uso real conviene
+el plan de pago o cualquier otro PostgreSQL (cambia `DATABASE_URL`).
+
+Seguridad de las cuentas: contraseñas con scrypt y sal, sesiones con token
+aleatorio en cookie httpOnly (en la base de datos solo se guarda su hash), límite
+de intentos por IP y por cuenta, protección CSRF por cabecera `Origin` y cabeceras
+de seguridad (CSP, HSTS en producción...).
 
 ## Licencias
 

@@ -19,10 +19,22 @@ export function ghostName(theme: 'blizzard' | 'neon'): string {
   return theme === 'neon' ? 'Neón' : 'Bruma';
 }
 
-export function Ghost({ mood = 'neutral', size = 64, title }: { mood?: GhostMood; size?: number; title?: string }) {
+export function Ghost({
+  mood = 'neutral',
+  size = 64,
+  title,
+  theme,
+}: {
+  mood?: GhostMood;
+  size?: number;
+  title?: string;
+  /** Fuerza el fantasma de un tema (miniaturas de los ajustes); por defecto, el tema actual. */
+  theme?: 'blizzard' | 'neon';
+}) {
   const { settings } = useSettings();
-  const neon = settings.theme === 'neon';
-  const label = title ?? ghostName(settings.theme);
+  const shown = theme ?? settings.theme;
+  const neon = shown === 'neon';
+  const label = title ?? ghostName(shown);
   return (
     <svg
       role="img"

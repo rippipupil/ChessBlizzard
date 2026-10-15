@@ -65,7 +65,9 @@ function checkEvent(event: ProgressEvent, today: string): Checked {
 
 /**
  * Comprueba que los ids de cada evento existen en el contenido y que su fecha está a
- * ±2 días de la del servidor. Si alguno falla, se rechaza la petición entera.
+ * ±2 días de la del servidor. Si alguno falla, se rechaza la petición entera (400
+ * `validation`, con un detalle por evento): el cliente puede entonces subir su progreso
+ * completo con /api/progress/import, que sí admite fechas pasadas.
  */
 export function checkEvents(events: ProgressEvent[], today: string): ProgressEvent[] {
   const out: ProgressEvent[] = [];

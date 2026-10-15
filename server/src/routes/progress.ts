@@ -15,7 +15,9 @@ export function registerProgressRoutes(app: FastifyInstance, ctx: AppContext): v
     progress: await readProgress(pool, currentUser(request).id),
   }));
 
-  // 200 eventos de ~120 bytes caben de sobra en 256 KiB.
+  // Si un evento está mal formado, tiene un id que no existe o una fecha fuera de ±2 días,
+  // se rechaza la petición entera con 400 `validation` (un detalle por problema) y no se
+  // aplica nada. 200 eventos de ~120 bytes caben de sobra en 256 KiB.
   app.post('/api/progress/events', { onRequest: auth, bodyLimit: 256 * 1024 }, async (request) => {
     const user = currentUser(request);
     const { events } = parse(eventsBodySchema, request.body);

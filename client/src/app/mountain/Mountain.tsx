@@ -8,7 +8,7 @@ import { useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { flattenStages, type Course, type Stage, type StageStatus } from '@chessblizzard/shared';
 import { useT, useTx } from '../../i18n';
-import { useElementWidth } from '../hooks';
+import { useElementWidth, usePlural } from '../hooks';
 import { Icon, STAGE_ICONS } from '../icons';
 import { buildMountain, COMPACT_SPEC, FULL_SPEC } from './geometry';
 
@@ -27,6 +27,7 @@ type CampState = 'done' | 'active' | 'locked';
 export function Mountain({ course, statuses, onLocked }: Props) {
   const t = useT();
   const tx = useTx();
+  const plural = usePlural();
   const wrapRef = useRef<HTMLDivElement>(null);
   const avail = useElementWidth(wrapRef, typeof window !== 'undefined' && window.innerWidth < 900 ? 390 : 740);
   const compact = avail < COMPACT_BELOW;
@@ -93,7 +94,7 @@ export function Mountain({ course, statuses, onLocked }: Props) {
               return c.first === 0 ? null : (
                 <li key={camp.id} className={`app-m-camp-tag is-${state}`} style={{ top: c.y - 17 }}>
                   {tx(camp.name)}
-                  <span className="app-visually-hidden">: {t('app.learn.campCount', { done, total })}</span>
+                  <span className="app-visually-hidden">: {plural('app.learn.campCount', total, { done })}</span>
                 </li>
               );
             }
@@ -105,7 +106,7 @@ export function Mountain({ course, statuses, onLocked }: Props) {
                 <span className="app-m-camp-text">
                   <span className="app-m-camp-name">{tx(camp.name)}</span>
                   {tx(camp.title) && <span className="app-m-camp-title">{tx(camp.title)}</span>}
-                  <span className="app-m-camp-count">{t('app.learn.campCount', { done, total })}</span>
+                  <span className="app-m-camp-count">{plural('app.learn.campCount', total, { done })}</span>
                 </span>
               </li>
             );

@@ -108,24 +108,36 @@ describe('POST /api/progress/events', () => {
     ['curso del sparring', { type: 'sparring_result', course: 'no-existe', result: 'win', day: TODAY }, 'events[1].course'],
     ['curso del examen', { type: 'exam_result', course: 'no-existe', score: 1, passScore: 0.8, day: TODAY }, 'events[1].course'],
   ])('rechaza la petición entera si un id no existe: %s', async (_name, bad, path) => {
-    const res = await sendEvents([review(), bad]);
+    const res = await sendEvents([review(), bad, stageDone()]);
     expect(res.statusCode).toBe(400);
     const { error } = res.json();
     expect(error.code).toBe('validation');
     expect(error.details).toEqual([{ path, message: expect.any(String) }]);
-    // No se ha aplicado nada, tampoco el evento válido.
+    // No se ha aplicado nada, tampoco los eventos válidos.
     expect(await getProgress()).toEqual(emptyProgress());
+    const { rows } = await testPool().query('SELECT count(*)::int AS n FROM progress');
+    expect(rows[0].n).toBe(0);
   });
 
   it('acepta fechas a ±2 días de la del servidor y rechaza las demás', async () => {
     for (const offset of [-2, -1, 0, 1, 2]) {
-      expect((await sendEvents([review('good', addDays(TODAY, offset))])).statusCode).toBe(200);
+      const res = await sendEvents([review('good', addDays(TODAY, offset))]);
+      expect(res.statusCode).toBe(200);
+      expect(res.json().xp).toBe(XP.lineGood);
     }
+    const before = await getProgress();
     for (const offset of [-3, 3, -400]) {
       const res = await sendEvents([review('good', addDays(TODAY, offset))]);
       expect(res.statusCode).toBe(400);
-      expect(res.json().error.details[0].path).toBe('events[0].day');
+      expect(res.json().error).toMatchObject({ code: 'validation', details: [{ path: 'events[0].day' }] });
     }
+    expect(await getProgress()).toEqual(before);
+  });
+
+  it('informa de todos los eventos con problemas a la vez', async () => {
+    const res = await sendEvents([review('good', addDays(TODAY, 10)), review(), { type: 'line_review', line: 'no-existe', grade: 'good', day: TODAY }]);
+    expect(res.statusCode).toBe(400);
+    expect(res.json().error.details.map((d: { path: string }) => d.path)).toEqual(['events[0].day', 'events[2].line']);
   });
 
   it.each(['2026-02-30', '2026-13-01', '15/10/2026', '2026-10-15T10:00:00Z', ''])('rechaza la fecha mal formada "%s"', async (day) => {

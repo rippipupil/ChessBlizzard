@@ -9,7 +9,8 @@
 //  2. Después, cada evento se envía con `push`. La respuesta (el progreso oficial) sustituye
 //     al local, reaplicando encima los eventos que hayan llegado mientras tanto.
 //  3. Sin red se reintenta con una espera creciente y al recuperar la conexión. Si el servidor
-//     rechaza un lote (validación), se envía evento a evento y se descartan solo los rechazados.
+//     rechaza un lote (validación: por ejemplo, eventos de hace más de dos días), se vuelve a
+//     subir el progreso completo con `attach`, que ya incluye esos eventos.
 //  4. Si la sesión se cierra (`sync` pasa a null), el progreso local era una copia del de la
 //     cuenta: se borra para que el siguiente invitado empiece de cero.
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
@@ -129,6 +130,25 @@ export function ProgressProvider({ children, sync = null }: { children: ReactNod
     return () => window.removeEventListener('storage', onStorage);
   }, [commit]);
 
+  /** Sube el progreso local entero (fusión en el servidor). Los eventos de la cola ya van dentro. */
+  const attachLocal = useCallback(
+    async (s: ProgressSync): Promise<boolean> => {
+      const covered = queue.current.length;
+      let official: ProgressState;
+      try {
+        official = s.attach ? await s.attach(stateRef.current) : stateRef.current;
+      } catch (err) {
+        if (!isRejected(err) || !s.pull) throw err;
+        official = await s.pull();
+      }
+      if (syncRef.current !== s) return false;
+      queue.current.splice(0, covered);
+      commit(reapply(official, queue.current));
+      return true;
+    },
+    [commit],
+  );
+
   const flush = useCallback(async () => {
     const s = syncRef.current;
     if (!s) return;
@@ -140,51 +160,30 @@ export function ProgressProvider({ children, sync = null }: { children: ReactNod
     busy.current = true;
     clearTimeout(retryTimer.current);
     setSyncStatus('syncing');
-    let dropped = false;
     try {
       if (!attached.current) {
-        const covered = queue.current.length;
-        if (s.attach) {
-          let official: ProgressState;
-          try {
-            official = await s.attach(stateRef.current);
-          } catch (err) {
-            if (!isRejected(err) || !s.pull) throw err;
-            official = await s.pull();
-          }
-          if (syncRef.current !== s) return;
-          queue.current.splice(0, covered);
-          commit(reapply(official, queue.current));
-        }
+        if (s.attach && !(await attachLocal(s))) return;
         attached.current = true;
       }
-
-      let oneByOne = false;
       while (queue.current.length > 0) {
-        const batch = queue.current.slice(0, oneByOne ? 1 : MAX_BATCH);
+        const batch = queue.current.slice(0, MAX_BATCH);
         let official: ProgressState;
         try {
           official = await s.push(batch);
         } catch (err) {
           if (syncRef.current !== s) return;
           if (!isRejected(err)) throw err;
-          if (batch.length > 1) {
-            oneByOne = true;
+          // El servidor rechaza algún evento (fecha fuera de su margen, contenido que ya no
+          // existe...). La importación sí admite fechas pasadas: se sube el progreso completo.
+          if (s.attach) {
+            if (!(await attachLocal(s))) return;
           } else {
-            // El servidor no acepta este evento (por ejemplo, una etapa que ya no existe).
-            queue.current.shift();
-            dropped = true;
+            queue.current.splice(0, batch.length);
           }
           continue;
         }
         if (syncRef.current !== s) return;
         queue.current.splice(0, batch.length);
-        commit(reapply(official, queue.current));
-        dropped = false;
-      }
-      if (dropped && s.pull) {
-        const official = await s.pull();
-        if (syncRef.current !== s) return;
         commit(reapply(official, queue.current));
       }
       retryDelay.current = RETRY_MIN;
@@ -203,7 +202,7 @@ export function ProgressProvider({ children, sync = null }: { children: ReactNod
         if (syncRef.current) queueMicrotask(() => flushRef.current());
       }
     }
-  }, [commit]);
+  }, [commit, attachLocal]);
 
   useEffect(() => {
     flushRef.current = () => void flush();

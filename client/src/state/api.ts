@@ -37,15 +37,23 @@ const SERVER_CODES: ReadonlySet<string> = new Set([
   'not_found',
 ]);
 
+/** Problema concreto de validación: `path` es el campo ("password", "events[3].line"...). */
+export interface ApiErrorDetail {
+  path: string;
+  message: string;
+}
+
 export class ApiError extends Error {
   readonly code: ApiErrorCode;
   readonly status: number;
+  readonly details: ApiErrorDetail[];
 
-  constructor(code: ApiErrorCode, message: string, status: number) {
+  constructor(code: ApiErrorCode, message: string, status: number, details: ApiErrorDetail[] = []) {
     super(message);
     this.name = 'ApiError';
     this.code = code;
     this.status = status;
+    this.details = details;
   }
 }
 
@@ -83,11 +91,14 @@ async function request<T>(method: 'GET' | 'POST' | 'PATCH', path: string, body?:
   }
 
   if (!res.ok) {
-    const err = (data as { error?: { code?: unknown; message?: unknown } } | null)?.error;
+    const err = (data as { error?: { code?: unknown; message?: unknown; details?: unknown } } | null)?.error;
     const serverCode = typeof err?.code === 'string' && SERVER_CODES.has(err.code) ? (err.code as ApiErrorCode) : null;
     const code: ApiErrorCode =
       serverCode ?? (res.status === 401 ? 'unauthorized' : res.status === 429 ? 'rate_limited' : !err || res.status >= 500 ? 'server' : 'validation');
-    throw new ApiError(code, typeof err?.message === 'string' ? err.message : res.statusText, res.status);
+    const details = Array.isArray(err?.details)
+      ? (err.details as unknown[]).filter((d): d is ApiErrorDetail => !!d && typeof (d as ApiErrorDetail).path === 'string')
+      : [];
+    throw new ApiError(code, typeof err?.message === 'string' ? err.message : res.statusText, res.status, details);
   }
   return data as T;
 }

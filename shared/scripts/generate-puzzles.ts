@@ -26,6 +26,8 @@
 //     cuanto la ganancia de material es estable o hay mate, y termina siempre con una
 //     jugada del alumno (longitud impar).
 //  5. Guarda los candidatos en JSON (--out) con la evaluación, la PV y la línea de origen.
+//     Con --extend N también se prolonga cada línea N medias jugadas con la mejor jugada de
+//     Stockfish y se revisan esas posiciones (--extend-only: solo esas).
 //     Con --confirm-depth N se vuelve a comprobar la primera jugada de cada candidato a
 //     profundidad N (lento: úsalo solo con pocos candidatos).
 //
@@ -40,9 +42,9 @@
 //
 // Opciones (por defecto): --course <id> (todos), --line <id>, --depth 16, --quick-depth 10,
 // --confirm-depth 0, --min-loss 200, --min-gap 150, --min-adv 200, --max-before 150,
-// --max-moves 3, --hash 64, --out <archivo> (un curso) o --out-dir <carpeta>
+// --max-moves 3, --extend 0, --hash 64, --out <archivo> (un curso) o --out-dir <carpeta>
 // (por defecto <tmp>/chessblizzard-puzzles/<curso>.json, o <curso>-traps.json con
-// --traps), --include-warnings, --traps, --verify.
+// --traps), --include-warnings, --extend-only, --traps, --verify.
 //
 // Stockfish usa un solo hilo: lanza un único proceso a la vez.
 
@@ -82,6 +84,9 @@ const MAX_MOVES = num('max-moves', 3);
 const HASH = num('hash', 64);
 const VERIFY = flag('verify');
 const INCLUDE_WARNINGS = flag('include-warnings');
+/** Medias jugadas con las que se prolonga cada línea (la mejor jugada de Stockfish para los dos bandos). */
+const EXTEND = num('extend', 0);
+const EXTEND_ONLY = flag('extend-only');
 const OUT_FILE = opt('out');
 const OUT_DIR = opt('out-dir') ?? join(tmpdir(), 'chessblizzard-puzzles');
 
@@ -211,6 +216,8 @@ interface Spot {
   lines: string[];
   /** Jugadas desde el inicio hasta la posición. */
   sans: string[];
+  /** Medias jugadas de Stockfish tras el final de la línea (0: posición de la propia línea). */
+  extended: number;
 }
 
 interface Step {
@@ -226,6 +233,8 @@ interface Candidate {
   id: string;
   line: string;
   lines: string[];
+  /** Medias jugadas de Stockfish tras el final de la línea antes del error (0: dentro de la línea). */
+  extended: number;
   /** Jugadas desde el inicio incluido el error del rival (formato de Puzzle.moves). */
   moves: string;
   error: string;
@@ -276,10 +285,41 @@ function collectSpots(course: Course): Spot[] {
         if (!known.lines.includes(line.id)) known.lines.push(line.id);
         return;
       }
-      byKey.set(key, { key, fen, line: line.id, lines: [line.id], sans: plies.slice(0, i).map((p) => p.san) });
+      byKey.set(key, { key, fen, line: line.id, lines: [line.id], sans: plies.slice(0, i).map((p) => p.san), extended: 0 });
     });
   }
   return [...byKey.values()];
+}
+
+/**
+ * Prolonga cada línea EXTEND medias jugadas con la mejor jugada de Stockfish (los dos
+ * bandos) y devuelve las posiciones nuevas en las que mueve el rival: las tácticas típicas
+ * de una apertura suelen aparecer justo después del final de la línea.
+ */
+async function extendSpots(engine: Engine, course: Course, known: Set<string>): Promise<Spot[]> {
+  const rival: Color = course.side === 'w' ? 'b' : 'w';
+  const out: Spot[] = [];
+  const ends = new Set<string>();
+  for (const line of course.lines) {
+    if (ONLY_LINE && line.id !== ONLY_LINE) continue;
+    if (line.practice === false) continue;
+    const plies = playLine(line);
+    if (!plies.length) continue;
+    const chess = new Chess(plies[plies.length - 1].fenAfter);
+    if (ends.has(positionKey(chess.fen()))) continue;
+    ends.add(positionKey(chess.fen()));
+    const sans = plies.map((p) => p.san);
+    for (let k = 1; k <= EXTEND && !chess.isGameOver(); k++) {
+      const [best] = await engine.analyse(chess.fen(), { depth: DEPTH, multipv: 1 });
+      if (!best) break;
+      sans.push(playUci(chess, best.pv[0]).san);
+      const key = positionKey(chess.fen());
+      if (chess.turn() !== rival || known.has(key)) continue;
+      known.add(key);
+      out.push({ key, fen: chess.fen(), line: line.id, lines: [line.id], sans: [...sans], extended: k });
+    }
+  }
+  return out;
 }
 
 /** Sigue la PV mientras cada jugada del alumno sea única y la ventaja decisiva. */
@@ -344,7 +384,13 @@ function tagsFor(fen: string, solution: string[], firstLines: PvLine[]): { tags:
 
 async function generate(engine: Engine, course: Course) {
   const student = course.side;
-  const spots = collectSpots(course);
+  const base = collectSpots(course);
+  let spots = EXTEND_ONLY ? [] : base;
+  if (EXTEND > 0) {
+    const extra = await extendSpots(engine, course, new Set(base.map((s) => s.key)));
+    console.log(`Líneas prolongadas ${EXTEND} medias jugadas: ${extra.length} posiciones nuevas`);
+    spots = [...spots, ...extra];
+  }
   const out = OUT_FILE ?? join(OUT_DIR, `${course.id}${TRAPS ? '-traps' : ''}.json`);
   mkdirSync(dirname(out), { recursive: true });
   const candidates: Candidate[] = [];
@@ -359,7 +405,7 @@ async function generate(engine: Engine, course: Course) {
         {
           course: course.id,
           generatedAt: new Date().toISOString(),
-          options: { depth: DEPTH, quickDepth: QUICK_DEPTH, confirmDepth: CONFIRM_DEPTH, minLoss: MIN_LOSS, minGap: MIN_GAP, minAdv: MIN_ADV, maxBefore: MAX_BEFORE, maxMoves: MAX_MOVES, line: ONLY_LINE ?? null },
+          options: { depth: DEPTH, quickDepth: QUICK_DEPTH, confirmDepth: CONFIRM_DEPTH, minLoss: MIN_LOSS, minGap: MIN_GAP, minAdv: MIN_ADV, maxBefore: MAX_BEFORE, maxMoves: MAX_MOVES, extend: EXTEND, line: ONLY_LINE ?? null },
           positions: spots.length,
           scanned: done,
           // Con --traps, primero los errores más tentadores (parecen buenos a poca profundidad).
@@ -424,6 +470,7 @@ async function generate(engine: Engine, course: Course) {
         id: `${course.id}-c${candidates.length + 1}`,
         line: spot.line,
         lines: spot.lines,
+        extended: spot.extended,
         moves: numbered([...spot.sans, s.move.san]),
         error: s.move.san,
         best: bestSan,

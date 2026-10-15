@@ -31,8 +31,6 @@ RUN npm ci --omit=dev --no-audit --no-fund
 
 # --- 3. Imagen final -----------------------------------------------------------------
 FROM ${NODE_IMAGE}
-# tini como PID 1: reenvía SIGTERM al servidor para que cierre limpio.
-RUN apk add --no-cache tini
 ENV NODE_ENV=production \
     PORT=3000 \
     NPM_CONFIG_UPDATE_NOTIFIER=false \
@@ -52,6 +50,6 @@ USER node
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
   CMD wget -q -O /dev/null "http://127.0.0.1:${PORT}/api/health" || exit 1
-ENTRYPOINT ["/sbin/tini", "--"]
 # Aplica las migraciones pendientes al arrancar (MIGRATE_ON_START=false para no hacerlo).
+# npm reenvía SIGTERM a tsx y este al servidor, que cierra limpio (`docker stop` no espera).
 CMD ["npm", "start", "-w", "server"]

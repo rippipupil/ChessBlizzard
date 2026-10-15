@@ -64,7 +64,7 @@ function CourseCard({ course, state }: { course: Course; state: ProgressState })
           <li key={camp.id} className={done === total && total > 0 ? 'is-done' : ''}>
             <Icon name={done === total && total > 0 ? 'check' : 'flag'} size={16} strokeWidth={2.4} />
             <span className="app-camp-list-name">{tx(camp.name)}</span>
-            <span className="app-camp-list-count">{t('app.learn.campCount', { done, total })}</span>
+            <span className="app-camp-list-count">{plural('app.learn.campCount', total, { done })}</span>
           </li>
         ))}
       </ul>

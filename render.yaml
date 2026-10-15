@@ -1,0 +1,35 @@
+# Blueprint de Render (https://render.com/docs/blueprint-spec): la web con la API en un
+# servicio Docker y un PostgreSQL gestionado. En Render: New > Blueprint > este repositorio.
+# Render da PORT y HTTPS; la app aplica las migraciones al arrancar.
+
+services:
+  - type: web
+    name: chessblizzard
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: chessblizzard-db
+          property: connectionString
+      # Render tiene un proxy delante: la IP del cliente (para el límite de intentos de
+      # inicio de sesión) llega en X-Forwarded-For.
+      - key: TRUST_PROXY
+        value: "true"
+
+databases:
+  - name: chessblizzard-db
+    plan: free
+    region: frankfurt
+    databaseName: chessblizzard
+    user: chessblizzard
+    postgresMajorVersion: "16"
+    # Sin acceso desde fuera de Render: solo la conexión interna del servicio web.
+    ipAllowList: []

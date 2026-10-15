@@ -163,7 +163,7 @@ export default function PuzzlesPage() {
   const id = params.get('p');
   const found = id ? findPuzzle(id) : undefined;
 
-  const keepFilter = (f: Filter) => (f === 'all' ? {} : { f });
+  const keepFilter = (f: Filter): Record<string, string> => (f === 'all' ? {} : { f });
   if (found) {
     return <PuzzleView course={found.course} puzzle={found.puzzle} onClose={() => setParams(keepFilter(filter))} />;
   }
