@@ -957,6 +957,39 @@ export const english: Course = {
       },
     },
     {
+      id: 'eng-trap-nd5',
+      name: { es: 'Trampa de la descubierta: 10...Cd5?', en: 'Discovered attack trap: 10...Nd5?' },
+      moves: '1.c4 e5 2.Nc3 Nf6 3.g3 d5 4.cxd5 Nxd5 5.Bg2 Nb6 6.Nf3 Nc6 7.O-O Be7 8.d3 O-O 9.a3 a5 10.Be3 Nd5 11.Nxd5 Qxd5 12.Nd4 Qd7 13.Nxc6',
+      notes: {
+        '10...Nd5': {
+          text: {
+            es: 'Parece activo: el caballo ataca e3 y c3. Pero si lo cambias, la dama negra tendrá que recapturar en d5, en plena diagonal de tu alfil de g2.',
+            en: 'It looks active: the knight hits e3 and c3. But if you trade it, the black queen has to recapture on d5, right on your g2-bishop’s diagonal.',
+          },
+          rival: ['d5e3', 'd5c3'],
+        },
+        '11.Nxd5': { text: { es: 'Cambias y obligas a la dama a recapturar.', en: 'You trade and force the queen to recapture.' } },
+        '12.Nd4': {
+          text: {
+            es: '¡Descubierta! El caballo se aparta, tu alfil de g2 ataca a la dama y, además, el caballo amenaza al de c6.',
+            en: 'A discovered attack! The knight steps aside, your g2-bishop hits the queen, and the knight also threatens the c6-knight.',
+          },
+          arrows: ['g2d5', 'd4c6'],
+        },
+        '13.Nxc6': {
+          text: {
+            es: 'Tras [13...bxc6] los peones negros de c6, c7 y a5 quedan débiles, y tu alfil de g2 y la columna c los atacarán.',
+            en: 'After [13...bxc6] Black’s c6-, c7- and a5-pawns are weak, and your g2-bishop and the c-file will go after them.',
+          },
+          marks: ['c6', 'c7', 'a5'],
+        },
+      },
+      summary: {
+        es: 'Si el negro centraliza el caballo en d5 sin preparación, cámbialo y aprovecha la descubierta [Nd4] contra su dama.',
+        en: 'If Black centralises the knight on d5 without preparation, trade it and use the discovered attack [Nd4] against the queen.',
+      },
+    },
+    {
       id: 'eng-err-b4',
       name: { es: 'Error típico: b4 sin preparar', en: 'Typical mistake: b4 without preparation' },
       practice: false,
@@ -1270,7 +1303,7 @@ export const english: Course = {
             es: 'Dos trampas en las que cae el negro cuando olvida tus alfiles y dos errores que tú no debes cometer.',
             en: 'Two traps Black falls into when he forgets about your bishops, and two mistakes you must not make.',
           },
-          lines: ['eng-trap-bd5', 'eng-trap-e4', 'eng-err-b4', 'eng-err-elephant'],
+          lines: ['eng-trap-bd5', 'eng-trap-e4', 'eng-trap-nd5', 'eng-err-b4', 'eng-err-elephant'],
         },
         {
           id: 'puzzles',
@@ -1290,7 +1323,7 @@ export const english: Course = {
             es: 'Juega una partida completa contra Stockfish. Mientras el rival siga el libro, practicarás tu repertorio.',
             en: 'Play a full game against Stockfish. While your opponent follows the book, you practise your repertoire.',
           },
-          lines: ['eng-main', 'eng-bb4', 'eng-closed', 'eng-a5', 'eng-sym', 'eng-rubinstein', 'eng-sym-e5', 'eng-kid', 'eng-grunfeld', 'eng-carlsbad', 'eng-nf6-e6', 'eng-trap-bd5', 'eng-trap-e4'],
+          lines: ['eng-main', 'eng-bb4', 'eng-closed', 'eng-a5', 'eng-sym', 'eng-rubinstein', 'eng-sym-e5', 'eng-kid', 'eng-grunfeld', 'eng-carlsbad', 'eng-nf6-e6', 'eng-trap-bd5', 'eng-trap-e4', 'eng-trap-nd5'],
         },
         {
           id: 'exam',
@@ -1301,7 +1334,7 @@ export const english: Course = {
             es: 'Líneas sin ayudas y puzzles. Necesitas un 80% para conquistar la cumbre.',
             en: 'Lines without hints and puzzles. You need 80% to conquer the summit.',
           },
-          lines: ['eng-main', 'eng-bb4', 'eng-closed', 'eng-a5', 'eng-sym', 'eng-rubinstein', 'eng-sym-e5', 'eng-kid', 'eng-grunfeld', 'eng-carlsbad', 'eng-nf6-e6', 'eng-trap-bd5', 'eng-trap-e4'],
+          lines: ['eng-main', 'eng-bb4', 'eng-closed', 'eng-a5', 'eng-sym', 'eng-rubinstein', 'eng-sym-e5', 'eng-kid', 'eng-grunfeld', 'eng-carlsbad', 'eng-nf6-e6', 'eng-trap-bd5', 'eng-trap-e4', 'eng-trap-nd5'],
           puzzles: [],
           passScore: 0.8,
         },

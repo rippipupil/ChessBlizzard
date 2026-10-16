@@ -623,6 +623,125 @@ export const kingsIndian: Course = {
 
     // --- Trampas ---
     {
+      id: 'kid-trap-gligoric',
+      name: { es: 'Trampa de la Gligoric: 9.dxe5?', en: 'Gligoric trap: 9.dxe5?' },
+      moves: '1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.Nf3 O-O 6.Be2 e5 7.O-O Nc6 8.Be3 Ng4 9.dxe5 Nxe3 10.fxe3 Nxe5',
+      notes: {
+        '9.dxe5': {
+          text: {
+            es: 'Ganar un peón en el centro parece natural, pero así el blanco te deja cambiar su alfil de e3.',
+            en: 'Winning a central pawn looks natural, but it lets you trade off the e3-bishop.',
+          },
+        },
+        '9...Nxe3': {
+          text: {
+            es: 'Primero el alfil. Tras [10.fxe3] el blanco tiene peones doblados en e3 y e4, y tu alfil de g7 ya no tiene rival en las casillas negras.',
+            en: 'The bishop first. After [10.fxe3] White has doubled pawns on e3 and e4, and your g7-bishop has no rival left on the dark squares.',
+          },
+        },
+        '10...Nxe5': {
+          text: {
+            es: 'Y recuperas el peón. Tienes la pareja de alfiles, un caballo magnífico en e5 y el peón de e3 es débil.',
+            en: 'And you win the pawn back. You have the bishop pair, a superb knight on e5 and a weak pawn on e3.',
+          },
+          marks: ['e3'],
+        },
+      },
+      summary: {
+        es: 'Contra [8.Be3 Ng4], si el blanco toma en e5, cambia antes en e3 y recupera el peón después.',
+        en: 'Against [8.Be3 Ng4], if White takes on e5, trade on e3 first and win the pawn back afterwards.',
+      },
+    },
+    {
+      id: 'kid-trap-petrosian',
+      name: { es: 'Trampa del Petrosian: 13.c5?', en: 'Petrosian trap: 13.c5?' },
+      moves: '1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.Nf3 O-O 6.Be2 e5 7.d5 a5 8.Bg5 h6 9.Bh4 Na6 10.Nd2 Qe8 11.O-O Nh7 12.a3 h5 13.c5 g5 14.Bg3 h4',
+      notes: {
+        '12...h5': {
+          text: {
+            es: 'Preparas [...g5] y [...h4]: el alfil de h4 empieza a quedarse sin casillas. Lo correcto para el blanco es [13.f3], que le deja libre f2.',
+            en: 'You prepare [...g5] and [...h4]: the h4-bishop is running out of squares. The right reply for White is [13.f3], which frees f2 for it.',
+          },
+          arrows: ['g6g5', 'h5h4'],
+        },
+        '13.c5': {
+          text: {
+            es: '¡Error! Es la ruptura natural del blanco en el flanco de dama, pero se olvida de su alfil de h4.',
+            en: 'A mistake! It is White’s natural queenside break, but it forgets about the h4-bishop.',
+          },
+          rival: ['c5d6'],
+        },
+        '13...g5': { text: { es: 'El alfil tiene que volver a g3…', en: 'The bishop has to go back to g3…' } },
+        '14...h4': {
+          text: {
+            es: '…y ahí lo atrapa el peón de h: no le queda ninguna casilla. Ganas una pieza por uno o dos peones.',
+            en: '…and there the h-pawn traps it: it has no square left. You win a piece for one or two pawns.',
+          },
+          marks: ['g3'],
+        },
+      },
+      summary: {
+        es: 'En el Petrosian, si el alfil de h4 no puede usar la casilla f2, [...g5] y [...h4] lo atrapan.',
+        en: 'In the Petrosian, if the h4-bishop cannot use the f2-square, [...g5] and [...h4] trap it.',
+      },
+    },
+    {
+      id: 'kid-trap-bayonet',
+      name: { es: 'Trampa de la Bayoneta: 10.g4?', en: 'Bayonet trap: 10.g4?' },
+      moves: '1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.Nf3 O-O 6.Be2 e5 7.O-O Nc6 8.d5 Ne7 9.b4 Nh5 10.g4 Bxg4',
+      notes: {
+        '10.g4': {
+          text: {
+            es: 'Parece que echa a tu caballo de h5, pero el peón de g4 está solo: el caballo de f3 le tapa la diagonal al alfil de e2.',
+            en: 'It looks as if it kicks your h5-knight away, but the g4-pawn stands alone: the f3-knight blocks the e2-bishop’s diagonal.',
+          },
+          rival: ['g4h5'],
+        },
+        '10...Bxg4': {
+          text: {
+            es: '¡Gratis! El alfil se come el peón y además defiende el caballo. Ahora amenazas [...Nf4] y [...Bh3], y el enroque blanco se ha quedado sin el peón de g.',
+            en: 'Free! The bishop takes the pawn and also defends the knight. Now you threaten [...Nf4] and [...Bh3], and White’s castled king has lost its g-pawn.',
+          },
+          arrows: ['h5f4', 'g4h3'],
+        },
+      },
+      summary: {
+        es: 'Si el blanco ataca tu caballo de h5 con [g4] sin prepararlo, tómalo con el alfil.',
+        en: 'If White attacks your h5-knight with an unprepared [g4], take it with the bishop.',
+      },
+    },
+    {
+      id: 'kid-trap-averbakh',
+      name: { es: 'Trampa del Averbakh: 10.Axh6?', en: 'Averbakh trap: 10.Bxh6?' },
+      moves: '1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.Be2 O-O 6.Bg5 c5 7.d5 h6 8.Be3 e6 9.Qd2 exd5 10.Bxh6 d4 11.Nd5 Nxe4',
+      notes: {
+        '10.Bxh6': {
+          text: {
+            es: 'El blanco se come el peón de h6 y espera [10...Bxh6 11.Qxh6], con la dama pegada a tu rey. Parece peligroso, pero se ha olvidado del centro.',
+            en: 'White grabs the h6-pawn and hopes for [10...Bxh6 11.Qxh6], with the queen right next to your king. It looks dangerous, but White has forgotten about the centre.',
+          },
+        },
+        '10...d4': {
+          text: {
+            es: '¡Jugada intermedia! No hace falta cambiar ya los alfiles: primero el peón ataca al caballo de c3, que es el que defiende e4.',
+            en: 'An in-between move! There is no need to trade bishops yet: first the pawn hits the c3-knight, the piece that defends e4.',
+          },
+          arrows: ['d4c3'],
+        },
+        '11...Nxe4': {
+          text: {
+            es: 'Sin el caballo de c3, el peón de e4 cae y además atacas a la dama. Tienes un peón de más, el centro y todas tus piezas activas.',
+            en: 'Without the c3-knight, the e4-pawn falls and you hit the queen as well. You are a pawn up, with the centre and all your pieces active.',
+          },
+          arrows: ['e4d2'],
+        },
+      },
+      summary: {
+        es: 'Si en el Averbakh el blanco toma en h6 antes de tiempo, juega primero [...d4] y después [...Nxe4].',
+        en: 'If White grabs on h6 too early in the Averbakh, play [...d4] first and then [...Nxe4].',
+      },
+    },
+    {
       id: 'kid-trap-early-e5',
       name: { es: 'Error típico: ...e5 sin enrocar', en: 'Typical mistake: ...e5 before castling' },
       practice: false,
@@ -867,7 +986,7 @@ export const kingsIndian: Course = {
             es: 'Trampas que puedes ponerle a tu rival y errores que tú no debes cometer.',
             en: 'Traps you can set for your opponent and mistakes you must not make.',
           },
-          lines: ['kid-trap-early-e5'],
+          lines: ['kid-trap-gligoric', 'kid-trap-petrosian', 'kid-trap-bayonet', 'kid-trap-averbakh', 'kid-trap-early-e5'],
         },
         {
           id: 'puzzles',
@@ -887,7 +1006,12 @@ export const kingsIndian: Course = {
             es: 'Juega una partida completa contra Stockfish. Mientras el rival siga el libro, practicarás tu repertorio.',
             en: 'Play a full game against Stockfish. While your opponent follows the book, you practise your repertoire.',
           },
-          lines: ['kid-main', 'kid-bayonet', 'kid-nd2', 'kid-gligoric', 'kid-petrosian', 'kid-exchange', 'kid-samisch', 'kid-samisch-gambit', 'kid-samisch-nge2', 'kid-fourpawns', 'kid-averbakh', 'kid-fianchetto', 'kid-london'],
+          lines: [
+            'kid-main', 'kid-bayonet', 'kid-nd2', 'kid-gligoric', 'kid-petrosian', 'kid-exchange',
+            'kid-samisch', 'kid-samisch-gambit', 'kid-samisch-nge2', 'kid-fourpawns',
+            'kid-averbakh', 'kid-fianchetto', 'kid-london',
+            'kid-trap-gligoric', 'kid-trap-petrosian', 'kid-trap-bayonet', 'kid-trap-averbakh',
+          ],
         },
         {
           id: 'exam',
@@ -898,7 +1022,12 @@ export const kingsIndian: Course = {
             es: 'Líneas sin ayudas y puzzles. Necesitas un 80% para conquistar la cumbre.',
             en: 'Lines without hints and puzzles. You need 80% to conquer the summit.',
           },
-          lines: ['kid-main', 'kid-bayonet', 'kid-nd2', 'kid-gligoric', 'kid-petrosian', 'kid-exchange', 'kid-samisch', 'kid-samisch-gambit', 'kid-samisch-nge2', 'kid-fourpawns', 'kid-averbakh', 'kid-fianchetto', 'kid-london'],
+          lines: [
+            'kid-main', 'kid-bayonet', 'kid-nd2', 'kid-gligoric', 'kid-petrosian', 'kid-exchange',
+            'kid-samisch', 'kid-samisch-gambit', 'kid-samisch-nge2', 'kid-fourpawns',
+            'kid-averbakh', 'kid-fianchetto', 'kid-london',
+            'kid-trap-gligoric', 'kid-trap-petrosian', 'kid-trap-bayonet', 'kid-trap-averbakh',
+          ],
           puzzles: [],
           passScore: 0.8,
         },

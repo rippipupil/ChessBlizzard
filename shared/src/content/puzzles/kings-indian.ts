@@ -99,7 +99,7 @@ export const kingsIndianPuzzles: Puzzle[] = [
     id: 'kid-p8',
     moves: '1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.f4 O-O 6.Nf3 c5 7.d5 e6 8.Be2 exd5 9.cxd5 Re8 10.Nd2 Na6 11.O-O Nc7 12.b3',
     solution: 'Nfxd5',
-    theme: { es: 'Ataque a la descubierta', en: 'Discovered attack' },
+    theme: { es: 'Clavada en la gran diagonal', en: 'Pin on the long diagonal' },
     hint: { es: 'Si el caballo de f6 se mueve, ¿qué ve tu alfil de g7?', en: 'If the f6-knight moves, what does your g7-bishop see?' },
     explanation: {
       es: 'El caballo de f6 tapa la gran diagonal de tu alfil. Tras [12.b3?], el caballo de c3 ya no está protegido por un peón y detrás tiene la torre de a1. [12...Nfxd5!] gana el peón y abre la diagonal: el caballo de c3 queda atacado dos veces y, si se cambian los caballos, [13.Nxd5 Nxd5 14.exd5 Bxa1] te da la calidad. En la India de Rey, el alfil de g7 es tu mejor pieza: vigila siempre lo que hay en su diagonal.',

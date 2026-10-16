@@ -482,8 +482,8 @@ export const dragon: Course = {
         },
         '13...Qc7': {
           text: {
-            es: '¡Fuerte! Amenazas ...[Be6] con tiempo sobre la dama y ...[Rb8]. Y si el blanco se come la torre con [14.Qxa8?], mira la trampa de la cumbre.',
-            en: 'Strong! You threaten ...[Be6] with tempo on the queen, and ...[Rb8]. And if White grabs the rook with [14.Qxa8?], see the trap at the summit.',
+            es: '¡Fuerte! Amenazas ...[Be6] con tiempo sobre la dama y ...[Rb8]. Si el blanco se come la torre con [14.Qxa8], responde [14...Bf5]: amenazas mate en c2 y el blanco tendrá que dar la dama por tus dos torres.',
+            en: 'Strong! You threaten ...[Be6] with tempo on the queen, and ...[Rb8]. If White grabs the rook with [14.Qxa8], answer [14...Bf5]: you threaten mate on c2 and White will have to give up the queen for your two rooks.',
           },
           arrows: ['c8e6', 'a8b8'],
         },
@@ -978,64 +978,72 @@ export const dragon: Course = {
       },
     },
     {
-      id: 'drag-trap-qxa8',
-      name: { es: 'Trampa: 14.Dxa8? Af5!', en: 'Trap: 14.Qxa8? Bf5!' },
-      moves: `${MODERN} 12.Nxd5 cxd5 13.Qxd5 Qc7 14.Qxa8 Bf5 15.Qxf8+ Kxf8 16.Bd3 Qe5 17.Kd2 Bxd3 18.Kxd3 Qxb2`,
+      id: 'drag-trap-rc8',
+      name: { es: 'Trampa de la columna c: 11.h4?', en: 'c-file trap: 11.h4?' },
+      moves: `${YUGO} 9.Bc4 Bd7 10.O-O-O Rc8 11.h4 Nxd4 12.Qxd4 Ng4 13.fxg4 Bxd4`,
       notes: {
-        '13...Qc7': {
+        '11.h4': {
           text: {
-            es: 'Tu torre de a8 está atacada… y la dejas. Es un cebo.',
-            en: 'Your a8-rook is attacked… and you leave it. It is bait.',
+            es: 'Es el plan natural del blanco ([h4]-[h5] contra tu rey), pero se olvida de que su alfil de c4 está en la columna de tu torre. Lo correcto era [11.Bb3].',
+            en: 'It is White’s natural plan ([h4]-[h5] against your king), but it forgets that the c4-bishop stands on your rook’s file. The right move was [11.Bb3].',
           },
+          rival: ['h4h5'],
         },
-        '14.Qxa8': {
+        '11...Nxd4': {
           text: {
-            es: '¡Error! La dama blanca se va a la esquina, lejos de su rey.',
-            en: 'A mistake! The white queen goes to the corner, far from its king.',
+            es: '¡Ahora! Si [12.Bxd4], [12...Rxc4] gana el alfil. Y si el blanco recupera con la dama…',
+            en: 'Now! If [12.Bxd4], [12...Rxc4] wins the bishop. And if White recaptures with the queen…',
           },
+          arrows: ['c8c4'],
         },
-        '14...Bf5': {
+        '12...Ng4': {
           text: {
-            es: '¡Amenazas mate en c2! La dama y el alfil apuntan a esa casilla.',
-            en: 'You threaten mate on c2! Your queen and bishop both aim at that square.',
+            es: '…el caballo destapa tu alfil de g7, que ataca a la dama de d4, y además amenaza el alfil de e3. Haga lo que haga, el blanco pierde mucho material.',
+            en: '…the knight uncovers your g7-bishop, which hits the queen on d4, and also threatens the e3-bishop. Whatever White does, it will lose a lot of material.',
           },
-          arrows: ['c7c2', 'f5c2'],
+          arrows: ['g7d4', 'g4e3'],
         },
-        '15.Qxf8+': {
+        '13...Bxd4': {
           text: {
-            es: 'El blanco tiene que devolver material: entrega la dama por tus dos torres.',
-            en: 'White has to give material back: he gives up the queen for your two rooks.',
-          },
-        },
-        '15...Kxf8': {
-          text: {
-            es: 'Tienes la dama contra dos torres (y un peón menos), pero el rey blanco está desnudo y tus alfiles apuntan a c2 y b2. Ya estás mejor.',
-            en: 'You have the queen against two rooks (and a pawn less), but the white king is exposed and your bishops aim at c2 and b2. You are already better.',
-          },
-        },
-        '16.Bd3': {
-          text: {
-            es: 'Natural, pero otro error. La defensa más tenaz era [16.Rd2].',
-            en: 'Natural, but another mistake. The most stubborn defence was [16.Rd2].',
-          },
-        },
-        '16...Qe5': {
-          text: {
-            es: '¡Ataque doble sobre b2 y e3!',
-            en: 'Double attack on b2 and e3!',
-          },
-          arrows: ['e5b2', 'e5e3'],
-        },
-        '18...Qxb2': {
-          text: {
-            es: 'Recuperas un peón y el rey blanco se ha quedado en el centro, a merced de tu dama y tu alfil. Tu ventaja es clara.',
-            en: 'You win back a pawn and the white king is stuck in the centre, at the mercy of your queen and bishop. Your advantage is clear.',
+            es: 'Has ganado la dama a cambio de dos piezas menores: tu ventaja es decisiva.',
+            en: 'You have won the queen for two minor pieces: your advantage is decisive.',
           },
         },
       },
       summary: {
-        es: 'Tras [12.Nxd5 cxd5 13.Qxd5 Qc7!], comerse la torre con [14.Qxa8?] es un error: [14...Bf5!] amenaza mate en c2. El blanco devuelve la dama y su rey queda expuesto.',
-        en: 'After [12.Nxd5 cxd5 13.Qxd5 Qc7!], grabbing the rook with [14.Qxa8?] is a mistake: [14...Bf5!] threatens mate on c2. White gives back the queen and his king is left exposed.',
+        es: 'Con [...Rc8] amenazas [...Nxd4] seguido de [...Rxc4] o [...Ng4]. Por eso el blanco tiene que retirar el alfil a b3 antes de atacar.',
+        en: 'With [...Rc8] you threaten [...Nxd4] followed by [...Rxc4] or [...Ng4]. That is why White must retreat the bishop to b3 before attacking.',
+      },
+    },
+    {
+      id: 'drag-trap-a4',
+      name: { es: 'Trampa del alfil de b3: 16.h4?', en: 'b3-bishop trap: 16.h4?' },
+      moves: `${TOPALOV} 13.Nd5 Nxd5 14.Bxg7 Kxg7 15.exd5 a5 16.h4 a4 17.Bxa4 bxa4`,
+      notes: {
+        '16.h4': {
+          text: {
+            es: '¡Error! El blanco sigue con su ataque, pero no le da una casilla a su alfil: en la línea principal juega [16.a3].',
+            en: 'A mistake! White carries on with the attack but does not give the bishop a square: in the main line White plays [16.a3].',
+          },
+          rival: ['h4h5'],
+        },
+        '16...a4': {
+          text: {
+            es: 'El alfil de b3 no tiene adónde ir: a2 la ocupa su propio peón y c4 la controla tu peón de b5.',
+            en: 'The b3-bishop has nowhere to go: its own pawn sits on a2 and your b5-pawn controls c4.',
+          },
+          marks: ['b3', 'a2', 'c4'],
+        },
+        '17...bxa4': {
+          text: {
+            es: 'Ganas una pieza por un peón, y la columna b se abre contra el rey blanco.',
+            en: 'You win a piece for a pawn, and the b-file opens up against the white king.',
+          },
+        },
+      },
+      summary: {
+        es: 'En la Topalov, cuando juegues [...a5], mira si el alfil de b3 tiene casilla: si no la tiene, [...a4] lo atrapa.',
+        en: 'In the Topalov, when you play [...a5], check whether the b3-bishop has a square: if not, [...a4] traps it.',
       },
     },
     {
@@ -1356,7 +1364,7 @@ export const dragon: Course = {
             es: 'Dos trampas en las que el blanco cae con facilidad y dos errores que tú no debes cometer.',
             en: 'Two traps that White falls into easily and two mistakes you must not make.',
           },
-          lines: ['drag-trap-a7', 'drag-trap-qxa8', 'drag-trap-ng4', 'drag-trap-levenfish'],
+          lines: ['drag-trap-a7', 'drag-trap-rc8', 'drag-trap-a4', 'drag-trap-ng4', 'drag-trap-levenfish'],
         },
         {
           id: 'puzzles',
@@ -1380,7 +1388,7 @@ export const dragon: Course = {
             'drag-main', 'drag-bxa7', 'drag-soltis', 'drag-9ooo', 'drag-9ooo-nxd5', 'drag-9g4',
             'drag-classical', 'drag-levenfish', 'drag-fianchetto',
             'drag-alapin', 'drag-moscow', 'drag-closed', 'drag-grandprix', 'drag-morra',
-            'drag-trap-a7', 'drag-trap-qxa8',
+            'drag-trap-a7', 'drag-trap-rc8', 'drag-trap-a4',
           ],
         },
         {
@@ -1396,7 +1404,7 @@ export const dragon: Course = {
             'drag-main', 'drag-bxa7', 'drag-soltis', 'drag-9ooo', 'drag-9ooo-nxd5', 'drag-9g4',
             'drag-classical', 'drag-levenfish', 'drag-fianchetto',
             'drag-alapin', 'drag-moscow', 'drag-closed', 'drag-grandprix', 'drag-morra',
-            'drag-trap-a7', 'drag-trap-qxa8',
+            'drag-trap-a7', 'drag-trap-rc8', 'drag-trap-a4',
           ],
           puzzles: [],
           passScore: 0.8,
