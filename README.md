@@ -89,9 +89,12 @@ sin servidor: funcionan los cursos, la práctica, los puzzles, el sparring y el 
 con Stockfish, pero no hay cuentas y el progreso se guarda en el navegador.
 
 Se publica sola: cada push a la rama principal ejecuta `.github/workflows/pages.yml`, que
-compila con `npm run build:pages` y publica el resultado en GitHub Pages. El propio
-workflow activa Pages en el repositorio la primera vez; en Settings › Pages tiene que
-figurar "GitHub Actions" como origen.
+compila con `npm run build:pages` y sube el resultado a la rama `gh-pages`.
+
+Activar Pages es un paso único que solo puede dar el dueño del repositorio, en
+[Settings › Pages](https://github.com/rippipupil/ChessBlizzard/settings/pages): en
+"Build and deployment" elegir **Deploy from a branch**, rama **gh-pages**, carpeta
+**/ (root)** y pulsar **Save**. Al minuto la web responde en el enlace de arriba.
 
 ### Con servidor y cuentas
 
