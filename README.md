@@ -89,9 +89,9 @@ sin servidor: funcionan los cursos, la práctica, los puzzles, el sparring y el 
 con Stockfish, pero no hay cuentas y el progreso se guarda en el navegador.
 
 Se publica sola: cada push a la rama principal ejecuta `.github/workflows/pages.yml`, que
-compila con `npm run build:pages` y sube el resultado a la rama `gh-pages`. Si la web no
-aparece, en Settings › Pages tiene que estar elegido "Deploy from a branch" con la rama
-`gh-pages` y la carpeta `/ (root)`.
+compila con `npm run build:pages` y publica el resultado en GitHub Pages. El propio
+workflow activa Pages en el repositorio la primera vez; en Settings › Pages tiene que
+figurar "GitHub Actions" como origen.
 
 ### Con servidor y cuentas
 
