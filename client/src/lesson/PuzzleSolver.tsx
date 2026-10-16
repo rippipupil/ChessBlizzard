@@ -23,6 +23,8 @@ export interface PuzzleSolverProps {
   /** Cabecera del panel (si no se da, se muestra el tema del puzzle). */
   header?: ReactNode;
   continueLabel?: string;
+  /** XP ganada al registrar el intento (para el contador de la etapa). */
+  onXp?: (xp: number) => void;
 }
 
 interface Setup {
@@ -53,7 +55,7 @@ function setupOf(puzzle: Puzzle): Setup {
 
 type Phase = 'intro' | 'user' | 'auto' | 'wrong' | 'reveal' | 'end';
 
-export function PuzzleSolver({ puzzle, course, onDone, mode = 'normal', recordAttempt = true, header, continueLabel }: PuzzleSolverProps) {
+export function PuzzleSolver({ puzzle, course, onDone, mode = 'normal', recordAttempt = true, header, continueLabel, onXp }: PuzzleSolverProps) {
   const t = useT();
   const tx = useTx();
   const notation = useNotation();
@@ -77,7 +79,10 @@ export function PuzzleSolver({ puzzle, course, onDone, mode = 'normal', recordAt
     setPhase('end');
     if (!recorded.current) {
       recorded.current = true;
-      if (recordAttempt) record({ type: 'puzzle_attempt', puzzle: puzzle.id, solved });
+      if (recordAttempt) {
+        const gained = record({ type: 'puzzle_attempt', puzzle: puzzle.id, solved });
+        if (gained) onXp?.(gained);
+      }
     }
     sound(solved ? 'complete' : 'move');
   };

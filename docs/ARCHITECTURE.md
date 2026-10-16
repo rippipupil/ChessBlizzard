@@ -55,8 +55,10 @@ docs/     Este documento.
 ## API del servidor
 
 Todas las respuestas son JSON. Los errores tienen la forma
-`{ "error": { "code": "...", "message": "..." } }` con códigos `validation`,
-`email_taken`, `invalid_credentials`, `unauthorized`, `rate_limited`, `not_found`.
+`{ "error": { "code": "...", "message": "...", "details"?: [{ "path", "message" }] } }`
+con códigos `validation` (el único que trae `details`), `email_taken`,
+`invalid_credentials`, `unauthorized`, `forbidden`, `rate_limited`, `not_found` e
+`internal`. En `/api/progress/events`, un solo evento inválido rechaza el lote entero.
 
 La sesión va en la cookie `cb_session` (httpOnly, SameSite=Lax, Secure en producción).
 
@@ -165,12 +167,32 @@ useAuth(): sesión actual (user | null), login, register, logout
   check={square | null}
   arrows={BoardArrow[]}                    // { from, to, via?, kind: 'plan' | 'rival' | 'hint' | 'best' }
   marks={string[]}
+  // opcionales:
+  tones={{ [square]: 'ok' | 'err' | 'hint' }} // color de fondo de casillas sueltas
+  ariaLabel={string}  animate={boolean}  coordinates={boolean}
+  highlightLastMove={boolean}  className={string}
 />
+
+// engine/stockfish.ts (un solo Web Worker para toda la app)
+getEngine().analyze(fen, { multipv?, depth?, movetime?, searchmoves?, onUpdate? })
+  -> { promise: Promise<EngineResult>, cancel() }   // EngineResult: { lines, best, cancelled }
+getEngine().play(fen, { skill?, elo?, movetime?, depth? }) -> { promise: Promise<string | null>, cancel() }
+getEngine().stop()
+
+// engine/useAnalysis.ts: análisis en directo de una posición
+useAnalysis(fen | null, { enabled?, multipv?, depth? }): { fen, depth, lines, running, end, error }
 
 // lesson/index.ts
 <StagePlayer course={Course} stage={Stage} onExit={() => void} />
-<ReviewSession onExit={() => void} />
-<PuzzleSolver puzzle={Puzzle} course={Course} onDone={(solved: boolean) => void} />
+<ReviewSession onExit={() => void} courses?={Course[]} />
+<PuzzleSolver
+  puzzle={Puzzle} course={Course} onDone={(solved: boolean) => void}
+  // opcionales:
+  mode={'normal' | 'exam'}        // en examen: sin pistas y el primer fallo suspende
+  recordAttempt={boolean}         // registrar el intento en el progreso (por defecto, sí)
+  header={ReactNode}  continueLabel={string}
+  onXp={(xp: number) => void}     // XP ganada al registrar el intento
+/>
 <AnalysisBoard />
 ```
 

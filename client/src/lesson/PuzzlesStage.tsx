@@ -127,6 +127,7 @@ export function PuzzlesStage({ course, stage, onExit }: { course: Course; stage:
             </PanelHeader>
           }
           continueLabel={nextUnsolved ? t('lesson.puzzles.next') : t('lesson.continue')}
+          onXp={(gained) => setXp((x) => x + gained)}
           onDone={(solved) => {
             const nowSolved = solvedCount + (solved && !state.puzzles[current.id]?.solved ? 1 : 0);
             if (nowSolved >= required && !completed.current) {
