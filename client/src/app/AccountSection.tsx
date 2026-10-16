@@ -1,6 +1,7 @@
 // Cuenta: invitación a crear cuenta (modo invitado) o datos de la sesión y cierre de sesión.
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ACCOUNTS_ENABLED } from '../config';
 import { useT } from '../i18n';
 import { useAuth } from '../state/auth';
 import { useProgress } from '../state/progress';
@@ -29,7 +30,7 @@ export function AccountSection({ headingId, headingLevel = 2 }: { headingId: str
             <H id={headingId} className="app-h3">
               {t('app.account.guestTitle')}
             </H>
-            <p className="app-card-text">{t('app.account.guestText')}</p>
+            <p className="app-card-text">{t(ACCOUNTS_ENABLED ? 'app.account.guestText' : 'app.account.localText')}</p>
             {server === 'offline' && (
               <p className="app-card-note">
                 <Icon name="cloudOff" size={16} /> {t('app.account.serverDown')}
@@ -37,14 +38,16 @@ export function AccountSection({ headingId, headingLevel = 2 }: { headingId: str
             )}
           </div>
         </div>
-        <div className="app-account-actions">
-          <Link to="/registro" className="app-btn app-btn--primary">
-            {t('app.auth.register.cta')}
-          </Link>
-          <Link to="/entrar" className="app-btn app-btn--outline">
-            {t('app.auth.login.cta')}
-          </Link>
-        </div>
+        {ACCOUNTS_ENABLED && (
+          <div className="app-account-actions">
+            <Link to="/registro" className="app-btn app-btn--primary">
+              {t('app.auth.register.cta')}
+            </Link>
+            <Link to="/entrar" className="app-btn app-btn--outline">
+              {t('app.auth.login.cta')}
+            </Link>
+          </div>
+        )}
       </section>
     );
   }

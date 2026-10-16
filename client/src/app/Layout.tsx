@@ -3,6 +3,7 @@
 import { useMemo, type ReactNode } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { courses, dueLines } from '@chessblizzard/shared';
+import { ACCOUNTS_ENABLED } from '../config';
 import { useT } from '../i18n';
 import { useAuth } from '../state/auth';
 import { useProgress } from '../state/progress';
@@ -67,15 +68,17 @@ function AccountBox() {
           <Icon name="cloudOff" size={16} />
           {t('app.guest.title')}
         </span>
-        <span className="app-side-guest-text">{t('app.guest.text')}</span>
-        <span className="app-side-guest-actions">
-          <Link to="/registro" className="app-link-strong">
-            {t('app.auth.register.cta')}
-          </Link>
-          <Link to="/entrar" className="app-link">
-            {t('app.auth.login.cta')}
-          </Link>
-        </span>
+        <span className="app-side-guest-text">{t(ACCOUNTS_ENABLED ? 'app.guest.text' : 'app.guest.localText')}</span>
+        {ACCOUNTS_ENABLED && (
+          <span className="app-side-guest-actions">
+            <Link to="/registro" className="app-link-strong">
+              {t('app.auth.register.cta')}
+            </Link>
+            <Link to="/entrar" className="app-link">
+              {t('app.auth.login.cta')}
+            </Link>
+          </span>
+        )}
       </div>
     );
   }

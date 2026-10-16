@@ -26,6 +26,7 @@ export const appStrings: Dict = {
   // --- Modo invitado y sincronización ---
   'app.guest.title': { es: 'Modo invitado', en: 'Guest mode' },
   'app.guest.text': { es: 'Crea una cuenta para guardar tu progreso.', en: 'Create an account to save your progress.' },
+  'app.guest.localText': { es: 'Tu progreso se guarda en este navegador.', en: 'Your progress is saved in this browser.' },
   'app.guest.banner': {
     es: 'Estás en modo invitado: tu progreso solo se guarda en este navegador.',
     en: 'You are in guest mode: your progress is only saved in this browser.',
@@ -297,6 +298,10 @@ export const appStrings: Dict = {
   'app.account.guestText': {
     es: 'Tu progreso se guarda solo en este navegador. Crea una cuenta gratis para no perderlo y seguir en cualquier dispositivo.',
     en: 'Your progress is only saved in this browser. Create a free account to keep it safe and carry on from any device.',
+  },
+  'app.account.localText': {
+    es: 'Esta versión de ChessBlizzard funciona sin cuentas: tu progreso se guarda en este navegador. Si borras los datos del navegador, se pierde.',
+    en: 'This version of ChessBlizzard works without accounts: your progress is saved in this browser. Clearing the browser data deletes it.',
   },
   'app.account.serverDown': {
     es: 'Ahora mismo no se puede conectar con el servidor. Puedes seguir como invitado sin perder nada.',

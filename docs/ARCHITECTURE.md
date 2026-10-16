@@ -102,6 +102,7 @@ aplica los eventos con `applyEvents` y valida que los ids existan en el contenid
 
 ```
 client/src/
+  config.ts             Opciones de compilación: versión estática (GitHub Pages) sin cuentas
   main.tsx, app/        Rutas, layout (menú lateral, barra móvil) y páginas
   styles/tokens.css     Variables de color por tema y modo
   theme/                Fondos animados de cada tema y el fantasma (mascota)

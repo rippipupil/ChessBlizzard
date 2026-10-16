@@ -17,6 +17,7 @@ import {
   type Stage,
   type StageStatus,
 } from '@chessblizzard/shared';
+import { ACCOUNTS_ENABLED } from '../../config';
 import { useT, useTx } from '../../i18n';
 import { useAuth } from '../../state/auth';
 import { useProgress } from '../../state/progress';
@@ -388,7 +389,7 @@ export default function LearnPage() {
           <CoursePicker course={course} onPick={pickCourse} state={state} />
           <StatChips compact />
         </div>
-        <GuestBanner show={!user && state.xp > 0} />
+        <GuestBanner show={ACCOUNTS_ENABLED && !user && state.xp > 0} />
         <CourseTabs course={course} onPick={pickCourse} />
 
         <div id="app-course-panel" role="tabpanel" aria-labelledby={`app-tab-${course.id}`} className="app-course-panel">

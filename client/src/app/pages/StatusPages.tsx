@@ -43,7 +43,7 @@ export function RouteErrorPage() {
                 <button type="button" className="app-btn app-btn--primary" onClick={() => window.location.reload()}>
                   {t('app.error.reload')}
                 </button>
-                <a href="/" className="app-btn app-btn--outline">
+                <a href={import.meta.env.BASE_URL} className="app-btn app-btn--outline">
                   {t('app.error.home')}
                 </a>
               </>

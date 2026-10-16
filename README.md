@@ -1,5 +1,7 @@
 # ❄ ChessBlizzard
 
+**▶ Abrir la web: [rippipupil.github.io/ChessBlizzard](https://rippipupil.github.io/ChessBlizzard/)**
+
 Aprende aperturas de ajedrez subiendo una montaña. Cada apertura es un curso con
 tres campamentos (la estructura, las alternativas del rival y la cumbre), práctica
 con repetición espaciada, trampas, puzzles, sparring y análisis con Stockfish.
@@ -79,6 +81,19 @@ npm run audit -w shared -- --line kid-main --depth 18   # una línea
 ```
 
 ## Despliegue
+
+### GitHub Pages (versión estática)
+
+La web está publicada en **https://rippipupil.github.io/ChessBlizzard/**. Es la versión
+sin servidor: funcionan los cursos, la práctica, los puzzles, el sparring y el análisis
+con Stockfish, pero no hay cuentas y el progreso se guarda en el navegador.
+
+Se publica sola: cada push a la rama principal ejecuta `.github/workflows/pages.yml`, que
+compila con `npm run build:pages` y sube el resultado a la rama `gh-pages`. Si la web no
+aparece, en Settings › Pages tiene que estar elegido "Deploy from a branch" con la rama
+`gh-pages` y la carpeta `/ (root)`.
+
+### Con servidor y cuentas
 
 El repositorio incluye un `Dockerfile` y un `render.yaml` para desplegar en
 [Render](https://render.com) con un clic (New › Blueprint): un servicio web y una

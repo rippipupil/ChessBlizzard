@@ -8,6 +8,8 @@
     "dev": "vite",
     "prebuild": "node scripts/copy-stockfish.mjs",
     "build": "vite build",
+    "prebuild:pages": "node scripts/copy-stockfish.mjs",
+    "build:pages": "vite build --mode pages && node scripts/pages-fallback.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "e2e": "playwright test"

@@ -2,8 +2,9 @@
 // piezas SVG compartidas y las rutas (docs/ARCHITECTURE.md). Las páginas pesadas se cargan
 // cuando se visitan; el inicio va en el paquete principal para que aparezca al instante.
 import { useEffect, type ComponentType, type ReactNode } from 'react';
-import { createBrowserRouter, Outlet, RouterProvider, ScrollRestoration, useNavigation } from 'react-router-dom';
+import { createBrowserRouter, Navigate, Outlet, RouterProvider, ScrollRestoration, useNavigation } from 'react-router-dom';
 import { PieceSprite } from '../board/pieces';
+import { ACCOUNTS_ENABLED, routerBasename } from '../config';
 import { AuthProvider, useAuth } from '../state/auth';
 import { ProgressProvider } from '../state/progress';
 import { SettingsProvider, useSettings } from '../state/settings';
@@ -48,14 +49,19 @@ const router = createBrowserRouter([
           { path: 'analisis', lazy: page(() => import('./pages/AnalysisPage')) },
           { path: 'perfil', lazy: page(() => import('./pages/ProfilePage')) },
           { path: 'ajustes', lazy: page(() => import('./pages/SettingsPage')) },
-          { path: 'entrar', lazy: async () => ({ Component: (await import('./pages/AuthPage')).LoginPage }) },
-          { path: 'registro', lazy: async () => ({ Component: (await import('./pages/AuthPage')).RegisterPage }) },
+          // Sin servidor (GitHub Pages) no hay cuentas: estas rutas llevan al inicio.
+          ACCOUNTS_ENABLED
+            ? { path: 'entrar', lazy: async () => ({ Component: (await import('./pages/AuthPage')).LoginPage }) }
+            : { path: 'entrar', element: <Navigate to="/" replace /> },
+          ACCOUNTS_ENABLED
+            ? { path: 'registro', lazy: async () => ({ Component: (await import('./pages/AuthPage')).RegisterPage }) }
+            : { path: 'registro', element: <Navigate to="/" replace /> },
           { path: '*', element: <NotFoundPage /> },
         ],
       },
     ],
   },
-]);
+], { basename: routerBasename() });
 
 /** Progreso con el adaptador de sincronización de la cuenta (null en modo invitado). */
 function SyncedProgress({ children }: { children: ReactNode }) {

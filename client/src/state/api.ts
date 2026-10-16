@@ -5,6 +5,7 @@
 // servidor no responde (sin red, caído o sin desplegar) el código es "network" o "server":
 // la app sigue funcionando en modo invitado.
 import type { ProgressEvent, ProgressState, Settings } from '@chessblizzard/shared';
+import { ACCOUNTS_ENABLED } from '../config';
 
 export interface User {
   id: string;
@@ -64,6 +65,8 @@ export function isApiError(err: unknown): err is ApiError {
 const TIMEOUT_MS = 15_000;
 
 async function request<T>(method: 'GET' | 'POST' | 'PATCH', path: string, body?: unknown): Promise<T> {
+  // La versión estática (GitHub Pages) no tiene servidor: ni se intenta.
+  if (!ACCOUNTS_ENABLED) throw new ApiError('network', 'Esta versión de la web no tiene servidor', 0);
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   let res: Response;

@@ -10,14 +10,18 @@
 // conexión; la sesión se confirma en segundo plano con GET /api/auth/me.
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { DEFAULT_SETTINGS, sanitizeSettings, type Settings } from '@chessblizzard/shared';
+import { ACCOUNTS_ENABLED } from '../config';
 import { api, isApiError, type RegisterInput, type User } from './api';
 import type { ProgressSync } from './progress';
 import { useSettings } from './settings';
 
 const USER_KEY = 'cb.user.v1';
 
-/** unknown: aún no se sabe · online: responde · offline: no se puede contactar. */
-export type ServerStatus = 'unknown' | 'online' | 'offline';
+/**
+ * unknown: aún no se sabe · online: responde · offline: no se puede contactar ·
+ * disabled: la web no tiene servidor (versión estática, sin cuentas).
+ */
+export type ServerStatus = 'unknown' | 'online' | 'offline' | 'disabled';
 
 interface AuthContextValue {
   user: User | null;
@@ -77,9 +81,9 @@ function diffSettings(base: Settings, next: Settings): Partial<Settings> | null 
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { settings, replace: replaceSettings } = useSettings();
-  const [user, setUser] = useState<User | null>(loadUser);
-  const [checking, setChecking] = useState(true);
-  const [server, setServer] = useState<ServerStatus>('unknown');
+  const [user, setUser] = useState<User | null>(() => (ACCOUNTS_ENABLED ? loadUser() : null));
+  const [checking, setChecking] = useState(ACCOUNTS_ENABLED);
+  const [server, setServer] = useState<ServerStatus>(ACCOUNTS_ENABLED ? 'unknown' : 'disabled');
   /** Ajustes que tiene la cuenta en el servidor (null sin sesión). */
   const accountSettings = useRef<Settings | null>(user ? normalize(user.settings) : null);
   const userRef = useRef(user);
@@ -109,6 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Comprobar la sesión al cargar la app.
   useEffect(() => {
+    if (!ACCOUNTS_ENABLED) return;
     let cancelled = false;
     api
       .me()
