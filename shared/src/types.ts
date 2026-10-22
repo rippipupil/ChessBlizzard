@@ -10,15 +10,48 @@ export type Color = 'w' | 'b';
 /** Flechas en formato "e2e4". Para el salto de un caballo se puede dar el codo: "g1f3:g1g3f3". */
 export type ArrowSpec = string;
 
+/**
+ * Longitud máxima (caracteres, en cada idioma) de los textos del contenido. Las lecciones
+ * se leen en una tarjeta pequeña en el móvil: una idea por texto y lo demás en `more`.
+ */
+export const TEXT_LIMITS = {
+  /** Título de una diapositiva. */
+  slideTitle: 44,
+  /** Texto de una diapositiva: una o dos frases. */
+  slideText: 180,
+  /** Comentario de una jugada. */
+  noteText: 160,
+  /** Ampliación (`more`) de una diapositiva o de un comentario. */
+  more: 420,
+  /** Resumen de una línea. */
+  summary: 200,
+  /** Enunciado de una pregunta. */
+  question: 110,
+  /** Explicación de la respuesta de una pregunta. */
+  explanation: 200,
+  /** Opción de una pregunta de elegir. */
+  option: 60,
+} as const;
+
 export interface MoveNote {
-  /** Explicación de la jugada. Las jugadas entre corchetes ([Nf3], [9...Nd7]) se formatean. */
+  /**
+   * Explicación de la jugada, corta (TEXT_LIMITS.noteText). Las jugadas entre corchetes
+   * ([Nf3], [9...Nd7]) se formatean.
+   */
   text?: L10n;
+  /** Ampliación opcional: se muestra plegada ("¿Por qué?"). */
+  more?: L10n;
   /** Flechas del plan del alumno, dibujadas sobre la posición después de la jugada. */
   arrows?: ArrowSpec[];
   /** Flechas del plan rival. */
   rival?: ArrowSpec[];
   /** Casillas destacadas. */
   marks?: string[];
+  /**
+   * Pregunta que se hace justo después de esta jugada, sobre la posición resultante (si la
+   * pregunta no trae `fen` ni `moves`). Sirve para hacer pensar en vez de leer.
+   */
+  ask?: QuizItem;
 }
 
 export interface LineDef {
@@ -41,13 +74,21 @@ export type StageType = 'ideas' | 'line' | 'practice' | 'branch' | 'trap' | 'puz
 
 export interface Slide {
   title: L10n;
+  /** Una o dos frases (TEXT_LIMITS.slideText). */
   text: L10n;
+  /** Ampliación opcional, plegada. */
+  more?: L10n;
   /** Posición: o un FEN o las jugadas desde el inicio. */
   fen?: string;
   moves?: string;
   arrows?: ArrowSpec[];
   rival?: ArrowSpec[];
   marks?: string[];
+  /**
+   * Pregunta de la diapositiva: el alumno la responde sobre el tablero (o eligiendo) antes
+   * de pasar a la siguiente. Usa la posición de la diapositiva si no trae la suya.
+   */
+  ask?: QuizItem;
 }
 
 /** Pregunta de "encuentra la jugada" sobre el tablero. */
@@ -72,7 +113,28 @@ export interface QuizChoice {
   explanation: L10n;
 }
 
-export type QuizItem = QuizMove | QuizChoice;
+/** "Toca la casilla…" (o la pieza que está en ella): se responde tocando el tablero. */
+export interface QuizSquare {
+  kind: 'square';
+  question: L10n;
+  fen?: string;
+  moves?: string;
+  /** Casillas aceptadas ("d5"). */
+  answers: string[];
+  explanation: L10n;
+}
+
+/** Afirmación de verdadero o falso. */
+export interface QuizTrueFalse {
+  kind: 'truefalse';
+  question: L10n;
+  fen?: string;
+  moves?: string;
+  correct: boolean;
+  explanation: L10n;
+}
+
+export type QuizItem = QuizMove | QuizChoice | QuizSquare | QuizTrueFalse;
 
 interface StageBase {
   id: string;

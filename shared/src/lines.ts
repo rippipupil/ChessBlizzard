@@ -80,6 +80,14 @@ export function resolvePosition(spec: { fen?: string; moves?: string }): string 
   return plies.length ? plies[plies.length - 1].fenAfter : START_FEN;
 }
 
+/**
+ * Posición de una pregunta (`ask`) que no trae la suya: la de la diapositiva o la de
+ * después de la jugada a la que acompaña.
+ */
+export function resolvePositionOr(spec: { fen?: string; moves?: string }, fallback: string): string {
+  return spec.fen || spec.moves ? resolvePosition(spec) : fallback;
+}
+
 export interface RepertoireNode {
   /** Jugada del repertorio cuando le toca al alumno. */
   user?: string;

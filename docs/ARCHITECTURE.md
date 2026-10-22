@@ -47,6 +47,12 @@ docs/     Este documento.
 - Flechas: `"f7f5"`. En `arrows` van las del plan del alumno y en `rival` las del rival.
 - `practice: false` marca líneas que solo se estudian (errores del alumno que hay
   que evitar). No entran en práctica, sparring ni examen.
+- Los textos son cortos (`TEXT_LIMITS` en `types.ts`; los tests lo comprueban): una
+  idea por comentario o diapositiva, y lo accesorio en `more` (se muestra plegado).
+- Aprender haciendo: una diapositiva o un comentario pueden llevar `ask`, una pregunta
+  (`QuizItem`) que el alumno responde antes de seguir: `move` (encuentra la jugada),
+  `square` (toca la casilla), `choice` (elige) o `truefalse`. Si la pregunta no trae
+  posición, usa la de la diapositiva o la de después de la jugada (`resolvePositionOr`).
 - El repertorio debe ser coherente: en cada posición donde le toca al alumno, todas
   las líneas recomiendan la misma jugada (`buildRepertoire(course).conflicts` vacío).
 - Comprobaciones: `npm test -w shared` (legalidad, notas, coherencia) y
