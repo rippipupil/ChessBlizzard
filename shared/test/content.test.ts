@@ -23,8 +23,7 @@ function checkText(text: L10n | undefined, limit: number, where: string) {
   if (!text) return;
   for (const lang of ['es', 'en'] as const) {
     expect(text[lang].trim().length, `${where}: texto ${lang} vacío`).toBeGreaterThan(0);
-    // Límite de longitud: se activa cuando el contenido esté reescrito (ronda 2).
-    void limit;
+    expect(text[lang].length, `${where}: texto ${lang} demasiado largo (${text[lang].length} > ${limit}): "${text[lang].slice(0, 60)}…"`).toBeLessThanOrEqual(limit);
   }
 }
 
