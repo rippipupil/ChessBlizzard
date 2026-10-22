@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es" data-theme="blizzard" data-mode="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0c0d0f" />
+    <meta name="description" content="Aprende aperturas de ajedrez subiendo una montaña: Inglesa, India de Rey y Siciliana Dragón, con Stockfish." />
+    <title>ChessBlizzard</title>
+    <link rel="icon" href="/ChessBlizzard/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script>
+      // Aplica el tema, el modo y el idioma guardados antes de pintar, sin destellos.
+      (function () {
+        try {
+          var s = JSON.parse(localStorage.getItem('cb.settings.v1') || '{}');
+          var d = document.documentElement;
+          if (s.theme === 'blizzard' || s.theme === 'neon') d.setAttribute('data-theme', s.theme);
+          var m = s.colorMode;
+          if (m === 'system') m = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          if (m === 'dark' || m === 'light') d.setAttribute('data-mode', m);
+          if (s.locale === 'es' || s.locale === 'en') d.lang = s.locale;
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="/ChessBlizzard/assets/index-Bdfx8jRH.js"></script>
+    <link rel="modulepreload" crossorigin href="/ChessBlizzard/assets/rolldown-runtime-WkwZ5CU-.js">
+    <link rel="modulepreload" crossorigin href="/ChessBlizzard/assets/Ghost-g7AaBapI.js">
+    <link rel="modulepreload" crossorigin href="/ChessBlizzard/assets/hooks-B4b0thhz.js">
+    <link rel="modulepreload" crossorigin href="/ChessBlizzard/assets/progress-BKrUo3Q3.js">
+    <link rel="stylesheet" crossorigin href="/ChessBlizzard/assets/index-BO3foMNU.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>ChessBlizzard necesita JavaScript. · ChessBlizzard needs JavaScript.</noscript>
+  </body>
+</html>
